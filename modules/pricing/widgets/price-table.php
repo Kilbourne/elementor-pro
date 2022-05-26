@@ -188,6 +188,9 @@ class Price_Table extends Base_Widget {
 			[
 				'label' => esc_html__( 'Period', 'elementor-pro' ),
 				'type' => Controls_Manager::TEXT,
+				'dynamic' => [
+					'active' => true,
+				],
 				'default' => esc_html__( 'Monthly', 'elementor-pro' ),
 			]
 		);
@@ -208,6 +211,9 @@ class Price_Table extends Base_Widget {
 			[
 				'label' => esc_html__( 'Text', 'elementor-pro' ),
 				'type' => Controls_Manager::TEXT,
+				'dynamic' => [
+					'active' => true,
+				],
 				'default' => esc_html__( 'List Item', 'elementor-pro' ),
 			]
 		);

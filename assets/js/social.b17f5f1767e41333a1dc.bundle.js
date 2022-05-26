@@ -1,4 +1,4 @@
-/*! elementor-pro - v3.6.2 - 14-02-2022 */
+/*! elementor-pro - v3.7.1 - 16-05-2022 */
 (self["webpackChunkelementor_pro"] = self["webpackChunkelementor_pro"] || []).push([["social"],{
 
 /***/ "../modules/social/assets/js/frontend/handlers/facebook.js":

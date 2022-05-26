@@ -537,7 +537,8 @@ abstract class Theme_Document extends Library_Document {
 		 *
 		 * @since 2.0.0
 		 *
-		 * @param Theme_Document $this An instance of the theme document.
+		 * @param string        $preview_url Document preview URL.
+		 * @param Theme_Document $this       An instance of the theme document.
 		 */
 		$preview_url = apply_filters( 'elementor/document/wp_preview_url', $preview_url, $this );
 
