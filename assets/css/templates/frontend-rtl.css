@@ -5158,6 +5158,29 @@ the source property is coming from element/dev/scss...
   height: 1em;
 }
 
+.elementor-select-wrapper .select-caret-down-wrapper {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  inset-inline-end: 10px;
+  pointer-events: none;
+  font-size: 11px;
+}
+.elementor-select-wrapper .select-caret-down-wrapper svg {
+  display: unset;
+  width: 1em;
+  aspect-ratio: unset;
+  fill: currentColor;
+}
+.elementor-select-wrapper .select-caret-down-wrapper i {
+  font-size: 19px;
+  line-height: 2;
+}
+
+.elementor-select-wrapper.remove-before::before {
+  content: "" !important;
+}
+
 .elementor-widget-price-list .elementor-price-list {
   list-style: none;
   padding: 0;

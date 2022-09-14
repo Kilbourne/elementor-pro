@@ -283,8 +283,8 @@ class Admin {
 								),
 								'<strong>',
 								'</strong>',
-								'<a href="https://go.elementor.com/renew/" target="_blank">',
-								'</a>'
+								'<a href="https://go.elementor.com/renew/" target="_blank"><strong>',
+								'</strong></a>'
 							); ?>
 						</p>
 					<?php endif; ?>
@@ -774,7 +774,7 @@ class Admin {
 		}
 	}
 
-	public function __construct() {
+	public function register_actions() {
 		add_action( 'admin_menu', [ $this, 'register_page' ], 800 );
 		add_action( 'admin_init', [ $this, 'handle_tracker_actions' ], 9 );
 		add_action( 'admin_post_elementor_pro_activate_license', [ $this, 'action_activate_license' ] );

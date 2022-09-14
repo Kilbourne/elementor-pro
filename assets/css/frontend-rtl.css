@@ -1,4 +1,4 @@
-/*! elementor-pro - v3.7.3 - 31-07-2022 */
+/*! elementor-pro - v3.7.5 - 31-08-2022 */
 @charset "UTF-8";
 .elementor-bg-transform .elementor-bg {
   will-change: transform;
@@ -5963,6 +5963,31 @@ the source property is coming from element/dev/scss...
 }
 .elementor-form .elementor-button .e-font-icon-svg {
   height: 1em;
+}
+
+.elementor-select-wrapper .select-caret-down-wrapper {
+  position: absolute;
+  top: 50%;
+  -webkit-transform: translateY(-50%);
+      -ms-transform: translateY(-50%);
+          transform: translateY(-50%);
+  inset-inline-end: 10px;
+  pointer-events: none;
+  font-size: 11px;
+}
+.elementor-select-wrapper .select-caret-down-wrapper svg {
+  display: unset;
+  width: 1em;
+  aspect-ratio: unset;
+  fill: currentColor;
+}
+.elementor-select-wrapper .select-caret-down-wrapper i {
+  font-size: 19px;
+  line-height: 2;
+}
+
+.elementor-select-wrapper.remove-before::before {
+  content: "" !important;
 }
 
 .elementor-widget-price-list .elementor-price-list {
