@@ -1,4 +1,4 @@
-/*! elementor-pro - v3.8.2 - 21-11-2022 */
+/*! elementor-pro - v3.9.1 - 14-12-2022 */
 "use strict";
 (self["webpackChunkelementor_pro"] = self["webpackChunkelementor_pro"] || []).push([["loop"],{
 
@@ -260,11 +260,20 @@ class LoopGrid extends _posts.default {
       elementorPro.modules.loopBuilder.createTemplate();
     });
   }
+  /**
+   * Allows 3rd party add-ons to run code on the Loop Grid handler when the handler is initialized in the Editor.
+   */
+
+
+  doEditorInitAction() {
+    elementor.hooks.doAction('editor/widgets/loop-grid/on-init', this);
+  }
 
   onInit() {
     super.onInit(...arguments);
 
     if (elementorFrontend.isEditMode()) {
+      this.doEditorInitAction();
       this.attachEditDocumentHandle();
       this.handleCTA();
     }
@@ -462,4 +471,4 @@ exports["default"] = _default;
 /***/ })
 
 }]);
-//# sourceMappingURL=loop.f8ca20fc3aa8eec189ea.bundle.js.map
+//# sourceMappingURL=loop.1ec2eba54ab8dc79374e.bundle.js.map

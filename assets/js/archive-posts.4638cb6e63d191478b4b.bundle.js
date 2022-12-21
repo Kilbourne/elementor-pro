@@ -1,4 +1,4 @@
-/*! elementor-pro - v3.8.2 - 21-11-2022 */
+/*! elementor-pro - v3.9.1 - 14-12-2022 */
 "use strict";
 (self["webpackChunkelementor_pro"] = self["webpackChunkelementor_pro"] || []).push([["archive-posts"],{
 
@@ -182,25 +182,26 @@ class LoadMore extends elementorModules.frontend.handlers.Base {
 
   handleUiWhenNoPosts() {
     this.elements.postsWidgetWrapper.classList.add(this.classes.loadMorePaginationEnd);
-  }
+  } // eslint-disable-next-line no-unused-vars
+
+
+  afterInsertPosts(postsElements) {}
 
   handleSuccessFetch(result) {
     this.handleUiAfterLoading();
-    const selectors = this.getSettings('selectors'); // Grabbing only the new articles from the response without the existing once (prevent posts duplication).
+    const selectors = this.getSettings('selectors'); // Grabbing only the new articles from the response without the existing ones (prevent posts duplication).
 
-    const posts = result.querySelectorAll(`[data-id="${this.elementId}"] ${selectors.postsContainer} > ${selectors.postWrapperTag}`);
-    const nextPageUrl = result.querySelector('.e-load-more-anchor').getAttribute('data-next-page'); // Converting HTMLCollection to an Array and iterate it.
-
-    const postsHTML = [...posts].reduce((accumulator, post) => {
-      return accumulator + post.outerHTML;
-    }, '');
-    this.elements.postsContainer.insertAdjacentHTML('beforeend', postsHTML);
+    const postsElements = result.querySelectorAll(`[data-id="${this.elementId}"] ${selectors.postsContainer} > ${selectors.postWrapperTag}`);
+    const nextPageUrl = result.querySelector('.e-load-more-anchor').getAttribute('data-next-page');
+    postsElements.forEach(element => this.elements.postsContainer.append(element));
     this.elements.loadMoreAnchor.setAttribute('data-page', this.currentPage);
     this.elements.loadMoreAnchor.setAttribute('data-next-page', nextPageUrl);
 
     if (this.currentPage === this.maxPage) {
       this.handleUiWhenNoPosts();
     }
+
+    this.afterInsertPosts(postsElements);
   }
 
   handlePostsQuery() {
@@ -486,4 +487,4 @@ exports["default"] = _default;
 /***/ })
 
 }]);
-//# sourceMappingURL=archive-posts.293796707524630a266f.bundle.js.map
+//# sourceMappingURL=archive-posts.4638cb6e63d191478b4b.bundle.js.map

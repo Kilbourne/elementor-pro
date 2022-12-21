@@ -1,4 +1,4 @@
-/*! elementor-pro - v3.8.2 - 21-11-2022 */
+/*! elementor-pro - v3.9.1 - 14-12-2022 */
 "use strict";
 (self["webpackChunkelementor_pro"] = self["webpackChunkelementor_pro"] || []).push([["slides"],{
 
@@ -230,6 +230,7 @@ class SlidesHandler extends elementorModules.frontend.handlers.SwiperBase {
 
     if (Object.prototype.hasOwnProperty.call(changeableProperties, propertyName)) {
       this.updateSwiperOption(propertyName);
+      this.swiper.autoplay.start();
     }
   }
 
@@ -240,6 +241,7 @@ class SlidesHandler extends elementorModules.frontend.handlers.SwiperBase {
 
     if ('activeItemIndex' === propertyName) {
       this.swiper.slideToLoop(this.getEditSettings('activeItemIndex') - 1);
+      this.swiper.autoplay.stop();
     }
   }
 
@@ -250,4 +252,4 @@ exports["default"] = SlidesHandler;
 /***/ })
 
 }]);
-//# sourceMappingURL=slides.165bb6bd4e75b295be5d.bundle.js.map
+//# sourceMappingURL=slides.7eefba2d8482696c81d2.bundle.js.map

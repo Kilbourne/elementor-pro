@@ -1,4 +1,4 @@
-/*! elementor-pro - v3.8.2 - 21-11-2022 */
+/*! elementor-pro - v3.9.1 - 14-12-2022 */
 "use strict";
 (self["webpackChunkelementor_pro"] = self["webpackChunkelementor_pro"] || []).push([["stripe-button"],{
 
@@ -29,7 +29,8 @@ class StripeHandler extends elementorModules.frontend.handlers.Base {
     const settings = this.getSettings();
     return {
       form: this.$element[0].querySelector(settings.selectors.form),
-      errors: this.$element[0].querySelectorAll(settings.selectors.errors)
+      errors: this.$element[0].querySelectorAll(settings.selectors.errors),
+      post_id: this.$element.closest('[data-elementor-id]').attr('data-elementor-id')
     };
   }
 
@@ -48,7 +49,7 @@ class StripeHandler extends elementorModules.frontend.handlers.Base {
           formData = new FormData(stripeForm),
           ajaxurl = formData.get('url'),
           action = formData.get('action'),
-          postId = formData.get('post_id'),
+          postId = parseInt(this.elements.post_id),
           widgetId = formData.get('widget_id'),
           customErrorMsg = formData.get('custom_error_msg'),
           customErrorMsgGlobal = formData.get('custom_error_msg_global'),
@@ -130,4 +131,4 @@ exports["default"] = StripeHandler;
 /***/ })
 
 }]);
-//# sourceMappingURL=stripe-button.3c4e82ad4f8635e44542.bundle.js.map
+//# sourceMappingURL=stripe-button.2b227a10eaef65c0f24f.bundle.js.map
