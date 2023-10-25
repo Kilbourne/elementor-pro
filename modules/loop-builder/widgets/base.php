@@ -34,6 +34,30 @@ class Base extends Posts {
 		return $skin_id . '_' . Module::QUERY_ID;
 	}
 
+	protected function get_initial_config() {
+		$config = parent::get_initial_config();
+
+		$config['is_loop'] = true;
+		$config['add_parent_render_header'] = true;
+		$config['add_parent_render_footer'] = true;
+
+		return $config;
+	}
+
+	public function query_posts() {
+		$skin = $this->get_current_skin();
+		$query = false;
+		if ( $skin ) {
+			$query = $skin->query_posts( $this );
+		}
+
+		if ( $query ) {
+			$this->query = $query;
+		} else {
+			parent::query_posts();
+		}
+	}
+
 	/**
 	 * Get Posts Per Page Value
 	 *
@@ -44,7 +68,7 @@ class Base extends Posts {
 	 *
 	 * @return mixed
 	 */
-	protected function get_posts_per_page_value() {
+	public function get_posts_per_page_value() {
 		return $this->get_settings_for_display( 'posts_per_page' );
 	}
 
@@ -55,9 +79,16 @@ class Base extends Posts {
 	protected function register_controls() {
 		$this->register_layout_section();
 		$this->register_query_section();
+
+		// Carousel
+		$this->register_settings_section_controls();
+		$this->register_navigation_section_controls();
+
 		$this->register_pagination_section_controls();
 
 		$this->register_design_layout_controls();
+		$this->register_design_navigation_controls();
+		$this->register_design_pagination_controls();
 
 		// The `_skins` control determines the Loop's query source, so it is renamed for this to be clearer to the user.
 		$this->update_control( '_skin', [
@@ -116,38 +147,6 @@ class Base extends Posts {
 			]
 		);
 
-		$this->add_responsive_control(
-			'columns',
-			[
-				'label' => esc_html__( 'Columns', 'elementor-pro' ),
-				'type' => Controls_Manager::NUMBER,
-				'default' => '3',
-				'tablet_default' => '2',
-				'mobile_default' => '1',
-				'min' => 1,
-				'max' => 12,
-				'prefix_class' => 'elementor-grid%s-',
-				'frontend_available' => true,
-				'separator' => 'before',
-				'condition' => [
-					'template_id!' => '',
-				],
-			]
-		);
-
-		$this->add_control(
-			'posts_per_page',
-			[
-				'label' => esc_html__( 'Items Per Page', 'elementor-pro' ),
-				'type' => Controls_Manager::NUMBER,
-				'default' => 6,
-				'min' => 1,
-				'condition' => [
-					'template_id!' => '',
-				],
-			]
-		);
-
 		$this->end_controls_section();
 	}
 
@@ -176,7 +175,8 @@ class Base extends Posts {
 		$this->remove_responsive_control( 'align' );
 
 		$this->start_injection( [
-			'of' => 'text',
+			'of' => 'pagination_align',
+			'at' => 'after',
 		] );
 
 		$this->add_responsive_control(
@@ -218,6 +218,61 @@ class Base extends Posts {
 			]
 		);
 
+		$this->add_control(
+			'pagination_load_type',
+			[
+				'label' => esc_html__( 'Load Type', 'elementor-pro' ),
+				'type' => Controls_Manager::SELECT,
+				'default' => 'page_reload',
+				'options' => [
+					'page_reload' => esc_html__( 'Page Reload', 'elementor-pro' ),
+					'ajax' => esc_html__( 'AJAX', 'elementor-pro' ),
+				],
+				'frontend_available' => true,
+				'condition' => [
+					'pagination_type' => [
+						'numbers',
+						'prev_next',
+						'numbers_and_prev_next',
+					],
+				],
+				'separator' => 'before',
+			]
+		);
+
+		$this->add_control(
+			'auto_scroll',
+			[
+				'label' => esc_html__( 'Autoscroll', 'elementor-pro' ),
+				'type' => Controls_Manager::SWITCHER,
+				'default' => '',
+				'condition' => [
+					'pagination_load_type' => [
+						'ajax',
+					],
+				],
+				'frontend_available' => true,
+			]
+		);
+
+		$this->add_responsive_control(
+			'auto_scroll_offset',
+			[
+				'label' => esc_html__( 'Autoscroll offset', 'elementor-pro' ),
+				'type' => Controls_Manager::NUMBER,
+				'default' => 0,
+				'selectors' => [
+					'{{WRAPPER}}' => '--auto-scroll-offset: {{VALUE}}px;',
+				],
+				'condition' => [
+					'pagination_load_type' => [
+						'ajax',
+					],
+					'auto_scroll' => 'yes',
+				],
+			]
+		);
+
 		$this->end_injection();
 
 		// Remove the HTML Entity arrows inherited from the Posts widget from the prev/next pagination link labels.
@@ -234,52 +289,76 @@ class Base extends Posts {
 				'default' => esc_html__( 'Next', 'elementor-pro' ),
 			]
 		);
-	}
 
-	protected function register_design_layout_controls() {
-		$this->start_controls_section(
-			'section_design_layout',
+		$this->update_control(
+			'pagination_individual_divider',
 			[
-				'label' => esc_html__( 'Layout', 'elementor-pro' ),
-				'tab' => Controls_Manager::TAB_STYLE,
-			]
-		);
-
-		$this->add_responsive_control(
-			'column_gap',
-			[
-				'label' => esc_html__( 'Gap between columns', 'elementor-pro' ),
-				'type' => Controls_Manager::SLIDER,
-				'range' => [
-					'px' => [
-						'min' => 0,
-						'max' => 100,
+				'condition' => [
+					'pagination_type' => [
+						'numbers',
+						'numbers_and_prev_next',
+						'prev_next',
+					],
+					'pagination_load_type' => [
+						'page_reload',
 					],
 				],
-				'selectors' => [
-					'{{WRAPPER}}' => '--grid-column-gap: {{SIZE}}{{UNIT}}',
-				],
 			]
 		);
 
-		$this->add_responsive_control(
-			'row_gap',
+		$this->update_control(
+			'pagination_individual_handle',
 			[
-				'label' => esc_html__( 'Gap between rows', 'elementor-pro' ),
-				'type' => Controls_Manager::SLIDER,
-				'range' => [
-					'px' => [
-						'min' => 0,
-						'max' => 100,
+				'condition' => [
+					'pagination_type' => [
+						'numbers',
+						'numbers_and_prev_next',
+						'prev_next',
+					],
+					'pagination_load_type' => [
+						'page_reload',
 					],
 				],
-				'frontend_available' => true,
-				'selectors' => [
-					'{{WRAPPER}}' => '--grid-row-gap: {{SIZE}}{{UNIT}}',
-				],
 			]
 		);
 
-		$this->end_controls_section();
+		$this->update_control(
+			'pagination_individual_handle_message',
+			[
+				'raw' => esc_html__( 'For multiple Loop Widgets on the same page, toggle this on to control the pagination for each individually. Note: It affects the page\'s URL structure.', 'elementor-pro' ),
+				'condition' => [
+					'pagination_type' => [
+						'numbers',
+						'numbers_and_prev_next',
+						'prev_next',
+					],
+					'pagination_load_type' => [
+						'page_reload',
+					],
+				],
+			]
+		);
 	}
+
+	protected function register_design_layout_controls() {}
+
+	protected function register_design_navigation_controls() {}
+
+	protected function register_design_pagination_controls() {}
+
+	public function register_settings_section_controls() {}
+
+	public function register_navigation_section_controls() {}
+
+	public function get_loop_header_widget_classes(): array {
+		return [];
+	}
+
+	public function render_loop_header() {}
+
+	public function render_loop_footer() {}
+
+	public function before_skin_render() {}
+
+	public function after_skin_render() {}
 }

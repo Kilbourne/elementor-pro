@@ -162,7 +162,7 @@ class Activecampaign extends Integration_Base {
 		$subscriber = $this->create_subscriber_object( $record );
 
 		if ( ! $subscriber ) {
-			throw new \Exception( esc_html__( 'Integration requires an email field and a selected list', 'elementor-pro' ) );
+			throw new \Exception( 'Integration requires an email field and a selected list.' );
 		}
 
 		if ( 'default' === $form_settings['activecampaign_api_credentials_source'] ) {
@@ -250,11 +250,11 @@ class Activecampaign extends Integration_Base {
 		}
 
 		if ( empty( $api_key ) ) {
-			throw new \Exception( '`api_key` is required', 400 );
+			throw new \Exception( '`api_key` is required.', 400 );
 		}
 
 		if ( empty( $api_url ) ) {
-			throw new \Exception( '`api_url` is required', 400 );
+			throw new \Exception( '`api_url` is required.', 400 );
 		}
 
 		$handler = new Classes\Activecampaign_Handler( $api_key, $api_url );
@@ -267,8 +267,16 @@ class Activecampaign extends Integration_Base {
 		if ( ! isset( $_POST['api_key'] ) || ! isset( $_POST['api_url'] ) ) {
 			wp_send_json_error();
 		}
+
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_send_json_error( 'Permission denied' );
+		}
+
 		try {
-			new Classes\Activecampaign_Handler( $_POST['api_key'], $_POST['api_url'] );
+			new Classes\Activecampaign_Handler(
+				Utils::_unstable_get_super_global_value( $_POST, 'api_key' ),
+				Utils::_unstable_get_super_global_value( $_POST, 'api_url' )
+			);
 		} catch ( \Exception $exception ) {
 			wp_send_json_error();
 		}

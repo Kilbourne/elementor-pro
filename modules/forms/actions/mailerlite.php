@@ -3,6 +3,7 @@ namespace ElementorPro\Modules\Forms\Actions;
 
 use Elementor\Controls_Manager;
 use Elementor\Settings;
+use ElementorPro\Core\Utils;
 use ElementorPro\Modules\Forms\Classes\Form_Record;
 use ElementorPro\Modules\Forms\Classes\Mailerlite_Handler;
 use ElementorPro\Modules\Forms\Classes\Integration_Base;
@@ -227,7 +228,7 @@ class Mailerlite extends Integration_Base {
 		}
 
 		if ( empty( $api_key ) ) {
-			throw new \Exception( '`api_key` is required', 400 );
+			throw new \Exception( '`api_key` is required.', 400 );
 		}
 
 		$handler = new Mailerlite_Handler( $api_key );
@@ -269,8 +270,13 @@ class Mailerlite extends Integration_Base {
 		if ( ! isset( $_POST['api_key'] ) ) {
 			wp_send_json_error();
 		}
+
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_send_json_error( 'Permission denied' );
+		}
+
 		try {
-			new Mailerlite_Handler( $_POST['api_key'] );
+			new Mailerlite_Handler( $_POST['api_key'] ); // phpcs:ignore -- No need to sanitize to support special characters.
 		} catch ( \Exception $exception ) {
 			wp_send_json_error();
 		}
