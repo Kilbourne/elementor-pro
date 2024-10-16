@@ -42,6 +42,8 @@ class Module extends Module_Base {
 			return;
 		}
 
+		$old_section = Plugin::elementor()->controls_manager->get_control_from_stack( $element->get_unique_name(), 'section_custom_css_pro' );
+
 		if ( ! API::is_licence_has_feature( static::LICENSE_FEATURE_NAME, API::BC_VALIDATION_CALLBACK ) ) {
 			$template = Tiers::get_promotion_template( [
 				'title' => esc_html__( 'Meet Our Custom CSS', 'elementor-pro' ),
@@ -51,7 +53,7 @@ class Module extends Module_Base {
 				'link' => 'https://go.elementor.com/go-pro-advanced-custom-css/',
 			] );
 
-			$this->replace_controls_with_upgrade_promotion( $element, Controls_Manager::TAB_ADVANCED, $template );
+			$this->replace_controls_with_upgrade_promotion( $element, $old_section['tab'], $template );
 			return;
 		}
 
@@ -91,7 +93,7 @@ class Module extends Module_Base {
 	 */
 	public function add_page_settings_css( $post_css ) {
 		$document = Plugin::elementor()->documents->get( $post_css->get_post_id() );
-		$custom_css = $document->get_settings( 'custom_css' );
+		$custom_css = $document->get_settings( 'custom_css' ) ?? '';
 
 		$custom_css = trim( $custom_css );
 
@@ -141,15 +143,6 @@ class Module extends Module_Base {
 		);
 
 		$controls_stack->end_controls_section();
-	}
-
-	/**
-	 * @deprecated 3.1.0
-	 */
-	public function localize_settings() {
-		Plugin::elementor()->modules_manager->get_modules( 'dev-tools' )->deprecation->deprecated_function( __METHOD__, '3.1.0' );
-
-		return [];
 	}
 
 	protected function add_actions() {

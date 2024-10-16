@@ -7,6 +7,7 @@ use Elementor\Core\Utils\Assets_Translation_Loader;
 use ElementorPro\License\Admin as License_Admin;
 use ElementorPro\License\API as License_API;
 use ElementorPro\Plugin;
+use ElementorPro\Modules\DisplayConditions\Module as Display_Conditions_Module;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly
@@ -42,8 +43,8 @@ class Editor extends App {
 		add_filter( 'elementor/editor/panel/get_pro_details', function( $get_pro_details ) {
 			if ( defined( '\Elementor\Modules\Apps\Module::PAGE_ID' ) ) {
 				$get_pro_details['link'] = admin_url( 'admin.php?page=' . \Elementor\Modules\Apps\Module::PAGE_ID );
-				$get_pro_details['message'] = __( 'Extend Elementor With Apps', 'elementor-pro' );
-				$get_pro_details['button_text'] = __( 'Explore Apps', 'elementor-pro' );
+				$get_pro_details['message'] = __( 'Extend Elementor With Add-ons', 'elementor-pro' );
+				$get_pro_details['button_text'] = __( 'Explore Add-ons', 'elementor-pro' );
 			}
 
 			return $get_pro_details;
@@ -159,6 +160,12 @@ class Editor extends App {
 
 		if ( ! isset( $settings['promotionWidgets'] ) ) {
 			$settings['promotionWidgets'] = License_API::get_promotion_widgets();
+		}
+
+		if ( Display_Conditions_Module::can_use_display_conditions() && Display_Conditions_Module::is_experiment_active() ) {
+			$settings['displayConditions'] = Display_Conditions_Module::instance()
+				->get_conditions_manager()
+				->get_conditions_config();
 		}
 
 		return $settings;

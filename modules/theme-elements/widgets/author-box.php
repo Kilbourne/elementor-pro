@@ -37,6 +37,20 @@ class Author_Box extends Base {
 		return [ 'author', 'user', 'profile', 'biography', 'testimonial', 'avatar' ];
 	}
 
+	/**
+	 * Get style dependencies.
+	 *
+	 * Retrieve the list of style dependencies the widget requires.
+	 *
+	 * @since 3.24.0
+	 * @access public
+	 *
+	 * @return array Widget style dependencies.
+	 */
+	public function get_style_depends(): array {
+		return [ 'widget-theme-elements' ];
+	}
+
 	protected function register_controls() {
 		$this->start_controls_section(
 			'section_author_info',
@@ -69,7 +83,7 @@ class Author_Box extends Base {
 				'default' => 'yes',
 				'separator' => 'before',
 				'condition' => [
-					'source!' => 'custom',
+					'source' => 'current',
 				],
 				'render_type' => 'template',
 			]
@@ -83,13 +97,12 @@ class Author_Box extends Base {
 				'type' => Controls_Manager::NUMBER,
 				'default' => 300,
 				'condition' => [
-					'source!' => 'custom',
+					'source' => 'current',
 					'show_avatar' => 'yes',
 				],
 			]
 		);
 
-		//This controls for custom source
 		$this->add_control(
 			'author_avatar',
 			[
@@ -107,7 +120,6 @@ class Author_Box extends Base {
 				],
 			]
 		);
-		//END
 
 		$this->add_control(
 			'show_name',
@@ -119,14 +131,13 @@ class Author_Box extends Base {
 				'label_off' => esc_html__( 'Hide', 'elementor-pro' ),
 				'default' => 'yes',
 				'condition' => [
-					'source!' => 'custom',
+					'source' => 'current',
 				],
 				'render_type' => 'template',
 				'separator' => 'before',
 			]
 		);
 
-		//This control for custom source
 		$this->add_control(
 			'author_name',
 			[
@@ -140,9 +151,11 @@ class Author_Box extends Base {
 				'dynamic' => [
 					'active' => true,
 				],
+				'ai' => [
+					'active' => false,
+				],
 			]
 		);
-		//END
 
 		$this->add_control(
 			'author_name_tag',
@@ -174,7 +187,7 @@ class Author_Box extends Base {
 					'posts_archive' => esc_html__( 'Posts Archive', 'elementor-pro' ),
 				],
 				'condition' => [
-					'source!' => 'custom',
+					'source' => 'current',
 				],
 				'description' => esc_html__( 'Link for the Author Name and Image', 'elementor-pro' ),
 			]
@@ -190,7 +203,7 @@ class Author_Box extends Base {
 				'label_off' => esc_html__( 'Hide', 'elementor-pro' ),
 				'default' => 'yes',
 				'condition' => [
-					'source!' => 'custom',
+					'source' => 'current',
 				],
 				'render_type' => 'template',
 				'separator' => 'before',
@@ -207,7 +220,7 @@ class Author_Box extends Base {
 				'label_off' => esc_html__( 'Hide', 'elementor-pro' ),
 				'default' => 'no',
 				'condition' => [
-					'source!' => 'custom',
+					'source' => 'current',
 				],
 				'render_type' => 'template',
 				'separator' => 'before',
@@ -219,7 +232,6 @@ class Author_Box extends Base {
 			[
 				'label' => esc_html__( 'Link', 'elementor-pro' ),
 				'type' => Controls_Manager::URL,
-				'placeholder' => esc_html__( 'https://your-link.com', 'elementor-pro' ),
 				'condition' => [
 					'source' => 'custom',
 				],
@@ -249,7 +261,6 @@ class Author_Box extends Base {
 			[
 				'label' => esc_html__( 'Archive Button', 'elementor-pro' ),
 				'type' => Controls_Manager::URL,
-				'placeholder' => esc_html__( 'https://your-link.com', 'elementor-pro' ),
 				'dynamic' => [
 					'active' => true,
 				],
@@ -267,6 +278,9 @@ class Author_Box extends Base {
 				'default' => esc_html__( 'All Posts', 'elementor-pro' ),
 				'dynamic' => [
 					'active' => true,
+				],
+				'ai' => [
+					'active' => false,
 				],
 			]
 		);
@@ -325,6 +339,41 @@ class Author_Box extends Base {
 			[
 				'label' => esc_html__( 'Image', 'elementor-pro' ),
 				'tab' => Controls_Manager::TAB_STYLE,
+				'conditions' => [
+					'relation' => 'or',
+					'terms' => [
+						[
+							'relation' => 'and',
+							'terms' => [
+								[
+									'name' => 'source',
+									'operator' => '===',
+									'value' => 'current',
+								],
+								[
+									'name' => 'show_avatar',
+									'operator' => '===',
+									'value' => 'yes',
+								],
+							],
+						],
+						[
+							'relation' => 'and',
+							'terms' => [
+								[
+									'name' => 'source',
+									'operator' => '===',
+									'value' => 'custom',
+								],
+								[
+									'name' => 'author_avatar[url]',
+									'operator' => '!==',
+									'value' => '',
+								],
+							],
+						],
+					],
+				],
 			]
 		);
 
@@ -344,8 +393,50 @@ class Author_Box extends Base {
 					],
 				],
 				'prefix_class' => 'elementor-author-box--image-valign-',
-				'condition' => [
-					'layout!' => 'above',
+				'conditions' => [
+					'relation' => 'or',
+					'terms' => [
+						[
+							'relation' => 'and',
+							'terms' => [
+								[
+									'name' => 'source',
+									'operator' => '===',
+									'value' => 'current',
+								],
+								[
+									'name' => 'show_avatar',
+									'operator' => '===',
+									'value' => 'yes',
+								],
+								[
+									'name' => 'layout',
+									'operator' => '!==',
+									'value' => 'above',
+								],
+							],
+						],
+						[
+							'relation' => 'and',
+							'terms' => [
+								[
+									'name' => 'source',
+									'operator' => '===',
+									'value' => 'custom',
+								],
+								[
+									'name' => 'author_avatar[url]',
+									'operator' => '!==',
+									'value' => '',
+								],
+								[
+									'name' => 'layout',
+									'operator' => '!==',
+									'value' => 'above',
+								],
+							],
+						],
+					],
 				],
 			]
 		);
@@ -358,12 +449,52 @@ class Author_Box extends Base {
 				'size_units' => [ 'px', 'em', 'rem', 'custom' ],
 				'range' => [
 					'px' => [
-						'min' => 0,
 						'max' => 200,
+					],
+					'em' => [
+						'max' => 20,
+					],
+					'rem' => [
+						'max' => 20,
 					],
 				],
 				'selectors' => [
 					'{{WRAPPER}} .elementor-author-box__avatar img' => 'width: {{SIZE}}{{UNIT}}; height: {{SIZE}}{{UNIT}}',
+				],
+				'conditions' => [
+					'relation' => 'or',
+					'terms' => [
+						[
+							'relation' => 'and',
+							'terms' => [
+								[
+									'name' => 'source',
+									'operator' => '===',
+									'value' => 'current',
+								],
+								[
+									'name' => 'show_avatar',
+									'operator' => '===',
+									'value' => 'yes',
+								],
+							],
+						],
+						[
+							'relation' => 'and',
+							'terms' => [
+								[
+									'name' => 'source',
+									'operator' => '===',
+									'value' => 'custom',
+								],
+								[
+									'name' => 'author_avatar[url]',
+									'operator' => '!==',
+									'value' => '',
+								],
+							],
+						],
+					],
 				],
 			]
 		);
@@ -376,8 +507,13 @@ class Author_Box extends Base {
 				'size_units' => [ 'px', 'em', 'rem', 'custom' ],
 				'range' => [
 					'px' => [
-						'min' => 0,
 						'max' => 100,
+					],
+					'em' => [
+						'max' => 10,
+					],
+					'rem' => [
+						'max' => 10,
 					],
 				],
 				'selectors' => [
@@ -389,6 +525,41 @@ class Author_Box extends Base {
 
 					'{{WRAPPER}}.elementor-author-box--layout-image-above .elementor-author-box__avatar' => 'margin-bottom: {{SIZE}}{{UNIT}}',
 				],
+				'conditions' => [
+					'relation' => 'or',
+					'terms' => [
+						[
+							'relation' => 'and',
+							'terms' => [
+								[
+									'name' => 'source',
+									'operator' => '===',
+									'value' => 'current',
+								],
+								[
+									'name' => 'show_avatar',
+									'operator' => '===',
+									'value' => 'yes',
+								],
+							],
+						],
+						[
+							'relation' => 'and',
+							'terms' => [
+								[
+									'name' => 'source',
+									'operator' => '===',
+									'value' => 'custom',
+								],
+								[
+									'name' => 'author_avatar[url]',
+									'operator' => '!==',
+									'value' => '',
+								],
+							],
+						],
+					],
+				],
 			]
 		);
 
@@ -399,6 +570,41 @@ class Author_Box extends Base {
 				'type' => Controls_Manager::SWITCHER,
 				'selectors' => [
 					'{{WRAPPER}} .elementor-author-box__avatar img' => 'border-style: solid',
+				],
+				'conditions' => [
+					'relation' => 'or',
+					'terms' => [
+						[
+							'relation' => 'and',
+							'terms' => [
+								[
+									'name' => 'source',
+									'operator' => '===',
+									'value' => 'current',
+								],
+								[
+									'name' => 'show_avatar',
+									'operator' => '===',
+									'value' => 'yes',
+								],
+							],
+						],
+						[
+							'relation' => 'and',
+							'terms' => [
+								[
+									'name' => 'source',
+									'operator' => '===',
+									'value' => 'custom',
+								],
+								[
+									'name' => 'author_avatar[url]',
+									'operator' => '!==',
+									'value' => '',
+								],
+							],
+						],
+					],
 				],
 			]
 		);
@@ -412,8 +618,50 @@ class Author_Box extends Base {
 				'selectors' => [
 					'{{WRAPPER}} .elementor-author-box__avatar img' => 'border-color: {{VALUE}}',
 				],
-				'condition' => [
-					'image_border' => 'yes',
+				'conditions' => [
+					'relation' => 'or',
+					'terms' => [
+						[
+							'relation' => 'and',
+							'terms' => [
+								[
+									'name' => 'source',
+									'operator' => '===',
+									'value' => 'current',
+								],
+								[
+									'name' => 'show_avatar',
+									'operator' => '===',
+									'value' => 'yes',
+								],
+								[
+									'name' => 'image_border',
+									'operator' => '===',
+									'value' => 'yes',
+								],
+							],
+						],
+						[
+							'relation' => 'and',
+							'terms' => [
+								[
+									'name' => 'source',
+									'operator' => '===',
+									'value' => 'custom',
+								],
+								[
+									'name' => 'author_avatar[url]',
+									'operator' => '!==',
+									'value' => '',
+								],
+								[
+									'name' => 'image_border',
+									'operator' => '===',
+									'value' => 'yes',
+								],
+							],
+						],
+					],
 				],
 			]
 		);
@@ -431,12 +679,57 @@ class Author_Box extends Base {
 					'em' => [
 						'max' => 2,
 					],
+					'rem' => [
+						'max' => 2,
+					],
 				],
 				'selectors' => [
 					'{{WRAPPER}} .elementor-author-box__avatar img' => 'border-width: {{SIZE}}{{UNIT}}',
 				],
-				'condition' => [
-					'image_border' => 'yes',
+				'conditions' => [
+					'relation' => 'or',
+					'terms' => [
+						[
+							'relation' => 'and',
+							'terms' => [
+								[
+									'name' => 'source',
+									'operator' => '===',
+									'value' => 'current',
+								],
+								[
+									'name' => 'show_avatar',
+									'operator' => '===',
+									'value' => 'yes',
+								],
+								[
+									'name' => 'image_border',
+									'operator' => '===',
+									'value' => 'yes',
+								],
+							],
+						],
+						[
+							'relation' => 'and',
+							'terms' => [
+								[
+									'name' => 'source',
+									'operator' => '===',
+									'value' => 'custom',
+								],
+								[
+									'name' => 'author_avatar[url]',
+									'operator' => '!==',
+									'value' => '',
+								],
+								[
+									'name' => 'image_border',
+									'operator' => '===',
+									'value' => 'yes',
+								],
+							],
+						],
+					],
 				],
 			]
 		);
@@ -449,6 +742,41 @@ class Author_Box extends Base {
 				'size_units' => [ 'px', '%', 'em', 'rem', 'custom' ],
 				'selectors' => [
 					'{{WRAPPER}} .elementor-author-box__avatar img' => 'border-radius: {{SIZE}}{{UNIT}}',
+				],
+				'conditions' => [
+					'relation' => 'or',
+					'terms' => [
+						[
+							'relation' => 'and',
+							'terms' => [
+								[
+									'name' => 'source',
+									'operator' => '===',
+									'value' => 'current',
+								],
+								[
+									'name' => 'show_avatar',
+									'operator' => '===',
+									'value' => 'yes',
+								],
+							],
+						],
+						[
+							'relation' => 'and',
+							'terms' => [
+								[
+									'name' => 'source',
+									'operator' => '===',
+									'value' => 'custom',
+								],
+								[
+									'name' => 'author_avatar[url]',
+									'operator' => '!==',
+									'value' => '',
+								],
+							],
+						],
+					],
 				],
 			]
 		);
@@ -463,6 +791,41 @@ class Author_Box extends Base {
 						'separator' => 'default',
 					],
 				],
+				'conditions' => [
+					'relation' => 'or',
+					'terms' => [
+						[
+							'relation' => 'and',
+							'terms' => [
+								[
+									'name' => 'source',
+									'operator' => '===',
+									'value' => 'current',
+								],
+								[
+									'name' => 'show_avatar',
+									'operator' => '===',
+									'value' => 'yes',
+								],
+							],
+						],
+						[
+							'relation' => 'and',
+							'terms' => [
+								[
+									'name' => 'source',
+									'operator' => '===',
+									'value' => 'custom',
+								],
+								[
+									'name' => 'author_avatar[url]',
+									'operator' => '!==',
+									'value' => '',
+								],
+							],
+						],
+					],
+				],
 			]
 		);
 
@@ -471,7 +834,7 @@ class Author_Box extends Base {
 		$this->start_controls_section(
 			'section_text_style',
 			[
-				'label' => esc_html__( 'Text', 'elementor-pro' ),
+				'label' => esc_html__( 'Author', 'elementor-pro' ),
 				'tab' => Controls_Manager::TAB_STYLE,
 			]
 		);
@@ -482,6 +845,41 @@ class Author_Box extends Base {
 				'label' => esc_html__( 'Name', 'elementor-pro' ),
 				'type' => Controls_Manager::HEADING,
 				'separator' => 'before',
+				'conditions' => [
+					'relation' => 'or',
+					'terms' => [
+						[
+							'relation' => 'and',
+							'terms' => [
+								[
+									'name' => 'source',
+									'operator' => '===',
+									'value' => 'current',
+								],
+								[
+									'name' => 'show_name',
+									'operator' => '===',
+									'value' => 'yes',
+								],
+							],
+						],
+						[
+							'relation' => 'and',
+							'terms' => [
+								[
+									'name' => 'source',
+									'operator' => '===',
+									'value' => 'custom',
+								],
+								[
+									'name' => 'author_name',
+									'operator' => '!==',
+									'value' => '',
+								],
+							],
+						],
+					],
+				],
 			]
 		);
 
@@ -496,6 +894,41 @@ class Author_Box extends Base {
 				'selectors' => [
 					'{{WRAPPER}} .elementor-author-box__name' => 'color: {{VALUE}}',
 				],
+				'conditions' => [
+					'relation' => 'or',
+					'terms' => [
+						[
+							'relation' => 'and',
+							'terms' => [
+								[
+									'name' => 'source',
+									'operator' => '===',
+									'value' => 'current',
+								],
+								[
+									'name' => 'show_name',
+									'operator' => '===',
+									'value' => 'yes',
+								],
+							],
+						],
+						[
+							'relation' => 'and',
+							'terms' => [
+								[
+									'name' => 'source',
+									'operator' => '===',
+									'value' => 'custom',
+								],
+								[
+									'name' => 'author_name',
+									'operator' => '!==',
+									'value' => '',
+								],
+							],
+						],
+					],
+				],
 			]
 		);
 
@@ -506,6 +939,41 @@ class Author_Box extends Base {
 				'selector' => '{{WRAPPER}} .elementor-author-box__name',
 				'global' => [
 					'default' => Global_Typography::TYPOGRAPHY_PRIMARY,
+				],
+				'conditions' => [
+					'relation' => 'or',
+					'terms' => [
+						[
+							'relation' => 'and',
+							'terms' => [
+								[
+									'name' => 'source',
+									'operator' => '===',
+									'value' => 'current',
+								],
+								[
+									'name' => 'show_name',
+									'operator' => '===',
+									'value' => 'yes',
+								],
+							],
+						],
+						[
+							'relation' => 'and',
+							'terms' => [
+								[
+									'name' => 'source',
+									'operator' => '===',
+									'value' => 'custom',
+								],
+								[
+									'name' => 'author_name',
+									'operator' => '!==',
+									'value' => '',
+								],
+							],
+						],
+					],
 				],
 			]
 		);
@@ -518,12 +986,52 @@ class Author_Box extends Base {
 				'size_units' => [ 'px', 'em', 'rem', 'custom' ],
 				'range' => [
 					'px' => [
-						'min' => 0,
 						'max' => 100,
+					],
+					'em' => [
+						'max' => 10,
+					],
+					'rem' => [
+						'max' => 10,
 					],
 				],
 				'selectors' => [
 					'{{WRAPPER}} .elementor-author-box__name' => 'margin-bottom: {{SIZE}}{{UNIT}}',
+				],
+				'conditions' => [
+					'relation' => 'or',
+					'terms' => [
+						[
+							'relation' => 'and',
+							'terms' => [
+								[
+									'name' => 'source',
+									'operator' => '===',
+									'value' => 'current',
+								],
+								[
+									'name' => 'show_name',
+									'operator' => '===',
+									'value' => 'yes',
+								],
+							],
+						],
+						[
+							'relation' => 'and',
+							'terms' => [
+								[
+									'name' => 'source',
+									'operator' => '===',
+									'value' => 'custom',
+								],
+								[
+									'name' => 'author_name',
+									'operator' => '!==',
+									'value' => '',
+								],
+							],
+						],
+					],
 				],
 			]
 		);
@@ -534,6 +1042,41 @@ class Author_Box extends Base {
 				'label' => esc_html__( 'Biography', 'elementor-pro' ),
 				'type' => Controls_Manager::HEADING,
 				'separator' => 'before',
+				'conditions' => [
+					'relation' => 'or',
+					'terms' => [
+						[
+							'relation' => 'and',
+							'terms' => [
+								[
+									'name' => 'source',
+									'operator' => '===',
+									'value' => 'current',
+								],
+								[
+									'name' => 'show_biography',
+									'operator' => '===',
+									'value' => 'yes',
+								],
+							],
+						],
+						[
+							'relation' => 'and',
+							'terms' => [
+								[
+									'name' => 'source',
+									'operator' => '===',
+									'value' => 'custom',
+								],
+								[
+									'name' => 'author_bio',
+									'operator' => '!==',
+									'value' => '',
+								],
+							],
+						],
+					],
+				],
 			]
 		);
 
@@ -548,6 +1091,41 @@ class Author_Box extends Base {
 				'selectors' => [
 					'{{WRAPPER}} .elementor-author-box__bio' => 'color: {{VALUE}}',
 				],
+				'conditions' => [
+					'relation' => 'or',
+					'terms' => [
+						[
+							'relation' => 'and',
+							'terms' => [
+								[
+									'name' => 'source',
+									'operator' => '===',
+									'value' => 'current',
+								],
+								[
+									'name' => 'show_biography',
+									'operator' => '===',
+									'value' => 'yes',
+								],
+							],
+						],
+						[
+							'relation' => 'and',
+							'terms' => [
+								[
+									'name' => 'source',
+									'operator' => '===',
+									'value' => 'custom',
+								],
+								[
+									'name' => 'author_bio',
+									'operator' => '!==',
+									'value' => '',
+								],
+							],
+						],
+					],
+				],
 			]
 		);
 
@@ -558,6 +1136,41 @@ class Author_Box extends Base {
 				'selector' => '{{WRAPPER}} .elementor-author-box__bio',
 				'global' => [
 					'default' => Global_Typography::TYPOGRAPHY_TEXT,
+				],
+				'conditions' => [
+					'relation' => 'or',
+					'terms' => [
+						[
+							'relation' => 'and',
+							'terms' => [
+								[
+									'name' => 'source',
+									'operator' => '===',
+									'value' => 'current',
+								],
+								[
+									'name' => 'show_biography',
+									'operator' => '===',
+									'value' => 'yes',
+								],
+							],
+						],
+						[
+							'relation' => 'and',
+							'terms' => [
+								[
+									'name' => 'source',
+									'operator' => '===',
+									'value' => 'custom',
+								],
+								[
+									'name' => 'author_bio',
+									'operator' => '!==',
+									'value' => '',
+								],
+							],
+						],
+					],
 				],
 			]
 		);
@@ -570,12 +1183,52 @@ class Author_Box extends Base {
 				'size_units' => [ 'px', 'em', 'rem', 'custom' ],
 				'range' => [
 					'px' => [
-						'min' => 0,
 						'max' => 100,
+					],
+					'em' => [
+						'max' => 10,
+					],
+					'rem' => [
+						'max' => 10,
 					],
 				],
 				'selectors' => [
 					'{{WRAPPER}} .elementor-author-box__bio' => 'margin-bottom: {{SIZE}}{{UNIT}}',
+				],
+				'conditions' => [
+					'relation' => 'or',
+					'terms' => [
+						[
+							'relation' => 'and',
+							'terms' => [
+								[
+									'name' => 'source',
+									'operator' => '===',
+									'value' => 'current',
+								],
+								[
+									'name' => 'show_biography',
+									'operator' => '===',
+									'value' => 'yes',
+								],
+							],
+						],
+						[
+							'relation' => 'and',
+							'terms' => [
+								[
+									'name' => 'source',
+									'operator' => '===',
+									'value' => 'custom',
+								],
+								[
+									'name' => 'author_bio',
+									'operator' => '!==',
+									'value' => '',
+								],
+							],
+						],
+					],
 				],
 			]
 		);
@@ -587,6 +1240,9 @@ class Author_Box extends Base {
 			[
 				'label' => 'Button',
 				'tab' => Controls_Manager::TAB_STYLE,
+				'condition' => [
+					'link_text!' => '',
+				],
 			]
 		);
 
@@ -596,6 +1252,9 @@ class Author_Box extends Base {
 			'tab_button_normal',
 			[
 				'label' => esc_html__( 'Normal', 'elementor-pro' ),
+				'condition' => [
+					'link_text!' => '',
+				],
 			]
 		);
 
@@ -611,6 +1270,9 @@ class Author_Box extends Base {
 				'selectors' => [
 					'{{WRAPPER}} .elementor-author-box__button' => 'color: {{VALUE}}; border-color: {{VALUE}}',
 				],
+				'condition' => [
+					'link_text!' => '',
+				],
 			]
 		);
 
@@ -621,6 +1283,9 @@ class Author_Box extends Base {
 				'type' => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} .elementor-author-box__button' => 'background-color: {{VALUE}}',
+				],
+				'condition' => [
+					'link_text!' => '',
 				],
 			]
 		);
@@ -633,6 +1298,9 @@ class Author_Box extends Base {
 					'default' => Global_Typography::TYPOGRAPHY_ACCENT,
 				],
 				'selector' => '{{WRAPPER}} .elementor-author-box__button',
+				'condition' => [
+					'link_text!' => '',
+				],
 			]
 		);
 
@@ -642,6 +1310,9 @@ class Author_Box extends Base {
 			'tab_button_hover',
 			[
 				'label' => esc_html__( 'Hover', 'elementor-pro' ),
+				'condition' => [
+					'link_text!' => '',
+				],
 			]
 		);
 
@@ -656,6 +1327,9 @@ class Author_Box extends Base {
 				'selectors' => [
 					'{{WRAPPER}} .elementor-author-box__button:hover' => 'border-color: {{VALUE}}; color: {{VALUE}};',
 				],
+				'condition' => [
+					'link_text!' => '',
+				],
 			]
 		);
 
@@ -667,6 +1341,27 @@ class Author_Box extends Base {
 				'selectors' => [
 					'{{WRAPPER}} .elementor-author-box__button:hover' => 'background-color: {{VALUE}};',
 				],
+				'condition' => [
+					'link_text!' => '',
+				],
+			]
+		);
+
+		$this->add_control(
+			'button_hover_transition_duration',
+			[
+				'label' => esc_html__( 'Transition Duration', 'elementor-pro' ),
+				'type' => Controls_Manager::SLIDER,
+				'size_units' => [ 's', 'ms', 'custom' ],
+				'default' => [
+					'unit' => 'ms',
+				],
+				'selectors' => [
+					'{{WRAPPER}} .elementor-author-box__button' => 'transition-duration: {{SIZE}}{{UNIT}}',
+				],
+				'condition' => [
+					'link_text!' => '',
+				],
 			]
 		);
 
@@ -675,6 +1370,9 @@ class Author_Box extends Base {
 			[
 				'label' => esc_html__( 'Animation', 'elementor-pro' ),
 				'type' => Controls_Manager::HOVER_ANIMATION,
+				'condition' => [
+					'link_text!' => '',
+				],
 			]
 		);
 
@@ -693,6 +1391,9 @@ class Author_Box extends Base {
 						'max' => 20,
 					],
 					'em' => [
+						'max' => 2,
+					],
+					'rem' => [
 						'max' => 2,
 					],
 				],
@@ -714,8 +1415,13 @@ class Author_Box extends Base {
 				'size_units' => [ 'px', '%', 'em', 'rem', 'custom' ],
 				'range' => [
 					'px' => [
-						'min' => 0,
 						'max' => 100,
+					],
+					'em' => [
+						'max' => 10,
+					],
+					'rem' => [
+						'max' => 10,
 					],
 				],
 				'selectors' => [
@@ -738,6 +1444,9 @@ class Author_Box extends Base {
 					'{{WRAPPER}} .elementor-author-box__button' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 				],
 				'separator' => 'before',
+				'condition' => [
+					'link_text!' => '',
+				],
 			]
 		);
 
@@ -842,7 +1551,13 @@ class Author_Box extends Base {
 				'avatar',
 				[
 					'src' => esc_url( $author['avatar'] ),
-					'alt' => ( ! empty( $author['display_name'] ) ) ? $author['display_name'] : esc_html__( 'Author picture', 'elementor-pro' ),
+					'alt' => ( ! empty( $author['display_name'] ) )
+						? sprintf(
+							/* translators: %s: Author display name. */
+							esc_attr__( 'Picture of %s', 'elementor-pro' ),
+							$author['display_name']
+						)
+						: esc_html__( 'Author picture', 'elementor-pro' ),
 					'loading' => 'lazy',
 				]
 			);

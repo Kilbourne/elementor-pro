@@ -9,6 +9,7 @@ use Elementor\Group_Control_Text_Shadow;
 use Elementor\Group_Control_Typography;
 use ElementorPro\Base\Base_Widget;
 use ElementorPro\Modules\LoopFilter\Traits\Hierarchical_Taxonomy_Trait;
+use ElementorPro\Modules\LoopFilter\Traits\Taxonomy_Filter_Trait;
 use ElementorPro\Plugin;
 use Elementor\Utils;
 use ElementorPro\Modules\ThemeBuilder\Module as ThemeBuilderModule;
@@ -20,6 +21,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class Taxonomy_Filter extends Base_Widget {
 	use Hierarchical_Taxonomy_Trait;
+	use Taxonomy_Filter_Trait;
 	use Pagination_Trait;
 
 	public function get_name() {
@@ -31,7 +33,7 @@ class Taxonomy_Filter extends Base_Widget {
 	}
 
 	public function get_title() {
-		return __( 'Taxonomy Filter', 'elementor-pro' );
+		return esc_html__( 'Taxonomy Filter', 'elementor-pro' );
 	}
 
 	public function get_icon() {
@@ -42,21 +44,35 @@ class Taxonomy_Filter extends Base_Widget {
 		return [ 'filter', 'loop', 'filter bar', 'taxonomy', 'categories', 'tags' ];
 	}
 
+	/**
+	 * Get style dependencies.
+	 *
+	 * Retrieve the list of style dependencies the widget requires.
+	 *
+	 * @since 3.24.0
+	 * @access public
+	 *
+	 * @return array Widget style dependencies.
+	 */
+	public function get_style_depends(): array {
+		return [ 'widget-loop-filter' ];
+	}
+
 	protected function register_controls() {
 		$this->start_controls_section(
 			'section_taxonomy_filter',
 			[
-				'label' => __( 'Layout', 'elementor-pro' ),
+				'label' => esc_html__( 'Layout', 'elementor-pro' ),
 			]
 		);
 
 		$this->add_control(
 			'selected_element',
 			[
-				'label' => __( 'Selected loop grid', 'elementor-pro' ),
+				'label' => esc_html__( 'Selected loop grid', 'elementor-pro' ),
 				'type' => Controls_Manager::SELECT,
 				'options' => [
-					'' => 'Select a widget',
+					'' => esc_html__( 'Select a widget', 'elementor-pro' ),
 				],
 				'label_block' => true,
 				'frontend_available' => true,
@@ -66,10 +82,10 @@ class Taxonomy_Filter extends Base_Widget {
 		$this->add_control(
 			'taxonomy',
 			[
-				'label' => __( 'Taxonomy', 'elementor-pro' ),
+				'label' => esc_html__( 'Taxonomy', 'elementor-pro' ),
 				'type' => Controls_Manager::SELECT,
 				'options' => [
-					'' => 'Select a taxonomy',
+					'' => esc_html__( 'Select a taxonomy', 'elementor-pro' ),
 				],
 				'label_block' => true,
 				'condition' => [
@@ -82,11 +98,11 @@ class Taxonomy_Filter extends Base_Widget {
 		$this->add_responsive_control(
 			'direction',
 			[
-				'label' => __( 'Direction', 'elementor-pro' ),
+				'label' => esc_html__( 'Direction', 'elementor-pro' ),
 				'type' => Controls_Manager::SELECT,
 				'options' => [
-					'horizontal' => 'Horizontal',
-					'vertical' => 'Vertical',
+					'horizontal' => esc_html__( 'Horizontal', 'elementor-pro' ),
+					'vertical' => esc_html__( 'Vertical', 'elementor-pro' ),
 				],
 				'default' => 'horizontal',
 				'selectors_dictionary' => [
@@ -99,6 +115,7 @@ class Taxonomy_Filter extends Base_Widget {
 				'condition' => [
 					'selected_element!' => '',
 				],
+				'control_type' => 'content',
 			]
 		);
 
@@ -256,7 +273,7 @@ class Taxonomy_Filter extends Base_Widget {
 		$this->start_controls_section(
 			'section_settings',
 			[
-				'label' => __( 'Settings', 'elementor-pro' ),
+				'label' => esc_html__( 'Settings', 'elementor-pro' ),
 				'condition' => [
 					'selected_element!' => '',
 				],
@@ -275,7 +292,7 @@ class Taxonomy_Filter extends Base_Widget {
 			'multiple_selection',
 			[
 				'label' => esc_html__( 'Multiple Selection', 'elementor-pro' ),
-				'type' => \Elementor\Controls_Manager::SWITCHER,
+				'type' => Controls_Manager::SWITCHER,
 				'label_on' => esc_html__( 'Yes', 'elementor-pro' ),
 				'label_off' => esc_html__( 'No', 'elementor-pro' ),
 				'default' => 'no',
@@ -286,7 +303,7 @@ class Taxonomy_Filter extends Base_Widget {
 		$this->add_control(
 			'logical_combination',
 			[
-				'label' => __( 'Logical Combination', 'elementor-pro' ),
+				'label' => esc_html__( 'Logical Combination', 'elementor-pro' ),
 				'type' => Controls_Manager::SELECT,
 				'default' => 'AND',
 				'options' => [
@@ -334,16 +351,16 @@ class Taxonomy_Filter extends Base_Widget {
 		$this->add_control(
 			'child_taxonomy_depth',
 			[
-				'label' => __( 'Depth', 'elementor-pro' ),
+				'label' => esc_html__( 'Depth', 'elementor-pro' ),
 				'type' => Controls_Manager::SELECT,
 				'default' => '1',
 				'options' => [
-					'1' => '1',
-					'2' => '2',
-					'3' => '3',
-					'4' => '4',
-					'5' => '5',
-					'6' => '6',
+					'1' => esc_html__( '1', 'elementor-pro' ),
+					'2' => esc_html__( '2', 'elementor-pro' ),
+					'3' => esc_html__( '3', 'elementor-pro' ),
+					'4' => esc_html__( '4', 'elementor-pro' ),
+					'5' => esc_html__( '5', 'elementor-pro' ),
+					'6' => esc_html__( '6', 'elementor-pro' ),
 				],
 				'condition' => [
 					'show_child_taxonomy' => 'yes',
@@ -366,7 +383,7 @@ class Taxonomy_Filter extends Base_Widget {
 			[
 				'label' => esc_html__( 'First Item Title', 'elementor-pro' ),
 				'type' => Controls_Manager::TEXT,
-				'default' => 'All',
+				'default' => esc_html__( 'All', 'elementor-pro' ),
 				'label_block' => true,
 				'dynamic' => [
 					'active' => true,
@@ -392,8 +409,8 @@ class Taxonomy_Filter extends Base_Widget {
 				'label' => esc_html__( 'Horizontal Scroll', 'elementor-pro' ),
 				'type' => Controls_Manager::SELECT,
 				'options' => [
-					'disable' => 'Disable',
-					'enable' => 'Enable',
+					'disable' => esc_html__( 'Disable', 'elementor-pro' ),
+					'enable' => esc_html__( 'Enable', 'elementor-pro' ),
 				],
 				'condition' => [
 					'direction' => 'horizontal',
@@ -431,11 +448,16 @@ class Taxonomy_Filter extends Base_Widget {
 			[
 				'label' => esc_html__( 'Space between Items', 'elementor-pro' ),
 				'type' => Controls_Manager::SLIDER,
-				'size_units' => [ 'px' ],
+				'size_units' => [ 'px', 'em', 'rem', 'custom' ],
 				'range' => [
 					'px' => [
-						'min' => 0,
 						'max' => 200,
+					],
+					'em' => [
+						'max' => 20,
+					],
+					'rem' => [
+						'max' => 20,
 					],
 				],
 				'selectors' => [
@@ -773,14 +795,14 @@ class Taxonomy_Filter extends Base_Widget {
 				// This filter allows us to write the slug with non-latin characters as well, such as Hebrew.
 				$slug = apply_filters( 'editable_slug', $term->slug, $term );
 				?>
-				<button class="e-filter-item" data-filter="<?php echo esc_attr( $slug ); ?>" aria-pressed="<?php echo esc_html( $aria_pressed_value ); ?>"><?php echo esc_html( $term->name ); ?></button>
+				<button class="e-filter-item" data-filter="<?php echo esc_attr( $slug ); ?>" aria-pressed="<?php echo esc_attr( $aria_pressed_value ); ?>"><?php echo esc_html( $term->name ); ?></button>
 			<?php } ?>
 
 			<?php
 			$aria_pressed_value = ( 0 === $active_terms ) ? 'true' : 'false';
 			?>
 			<?php if ( 'yes' === $settings['show_first_item'] ) : ?>
-			<button class="e-filter-item" data-filter="__all" aria-pressed="<?php echo esc_html( $aria_pressed_value ); ?>">
+			<button class="e-filter-item" data-filter="__all" aria-pressed="<?php echo esc_attr( $aria_pressed_value ); ?>">
 				<?php echo $settings['first_item_title']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 			</button>
 			<?php endif; ?>
@@ -794,28 +816,9 @@ class Taxonomy_Filter extends Base_Widget {
 	 * @return void|\WP_Term[]
 	 */
 	private function get_filtered_taxonomy_terms( $user_selected_taxonomy, $settings ) {
-		$args = [
-			'taxonomy' => $user_selected_taxonomy,
-			'hide_empty' => 'yes' !== $settings['show_empty_items'],
-		];
+		$display_settings = $this->get_settings_for_display();
+		$settings['taxonomy'] = $user_selected_taxonomy;
 
-		if ( 'yes' !== $settings['show_child_taxonomy'] ) {
-			$args['parent'] = 0;
-		}
-
-		$terms = get_terms( $args );
-
-		if ( is_wp_error( $terms ) ) {
-			return;
-		}
-
-		if ( 'yes' === $settings['show_child_taxonomy'] ) {
-			$taxonomy_plain_view = [];
-			$hierarchy_terms = $this->filter_child_terms_by_depth( $terms, $this->get_settings_for_display( 'child_taxonomy_depth' ) );
-			$this->transform_taxonomy_hierarchy_to_plain( $taxonomy_plain_view, $hierarchy_terms );
-			$terms = ! empty( $taxonomy_plain_view ) ? $taxonomy_plain_view : $terms;
-		}
-
-		return $terms;
+		return $this->get_filtered_taxonomies( $settings, $display_settings );
 	}
 }

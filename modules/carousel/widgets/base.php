@@ -20,6 +20,10 @@ abstract class Base extends Base_Widget {
 		return [ 'imagesloaded' ];
 	}
 
+	protected function is_dynamic_content(): bool {
+		return false;
+	}
+
 	abstract protected function add_repeater_controls( Repeater $repeater );
 
 	abstract protected function get_repeater_defaults();
@@ -107,6 +111,14 @@ abstract class Base extends Base_Widget {
 					'px' => [
 						'min' => 100,
 						'max' => 1000,
+					],
+					'em' => [
+						'min' => 10,
+						'max' => 100,
+					],
+					'rem' => [
+						'min' => 10,
+						'max' => 100,
 					],
 					'vh' => [
 						'min' => 20,
@@ -401,7 +413,6 @@ abstract class Base extends Base_Widget {
 			[
 				'label' => esc_html__( 'Arrows', 'elementor-pro' ),
 				'type' => Controls_Manager::HEADING,
-				'separator' => 'none',
 			]
 		);
 
@@ -417,6 +428,12 @@ abstract class Base extends Base_Widget {
 				'range' => [
 					'px' => [
 						'max' => 100,
+					],
+					'em' => [
+						'max' => 10,
+					],
+					'rem' => [
+						'max' => 10,
 					],
 				],
 				'selectors' => [
@@ -476,6 +493,12 @@ abstract class Base extends Base_Widget {
 				'range' => [
 					'px' => [
 						'max' => 100,
+					],
+					'em' => [
+						'max' => 10,
+					],
+					'rem' => [
+						'max' => 10,
 					],
 				],
 				'selectors' => [

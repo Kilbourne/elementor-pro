@@ -51,6 +51,20 @@ class Paypal_Button extends Payment_Button {
 		return 'PayPal';
 	}
 
+	/**
+	 * Get style dependencies.
+	 *
+	 * Retrieve the list of style dependencies the widget requires.
+	 *
+	 * @since 3.24.0
+	 * @access public
+	 *
+	 * @return array Widget style dependencies.
+	 */
+	public function get_style_depends(): array {
+		return [ 'widget-payments' ];
+	}
+
 	// Retrieve a numerical field from settings, and default to $min if it's too small.
 	protected function get_numeric_setting( $key, $min = 0 ) {
 		$num = doubleval( $this->get_settings_for_display( $key ) );
@@ -256,6 +270,9 @@ class Paypal_Button extends Payment_Button {
 				'dynamic' => [
 					'active' => true,
 				],
+				'ai' => [
+					'active' => false,
+				],
 				'description' => esc_html__( 'Transactions made through your PayPal button will be registered under this account.', 'elementor-pro' ),
 				'label_block' => true,
 				'condition' => [
@@ -272,6 +289,9 @@ class Paypal_Button extends Payment_Button {
 				'type' => Controls_Manager::TEXT,
 				'dynamic' => [
 					'active' => true,
+				],
+				'ai' => [
+					'active' => false,
 				],
 				'label_block' => true,
 				'condition' => [
@@ -324,6 +344,9 @@ class Paypal_Button extends Payment_Button {
 				'type' => Controls_Manager::TEXT,
 				'dynamic' => [
 					'active' => true,
+				],
+				'ai' => [
+					'active' => false,
 				],
 				'description' => esc_html__( 'This is the address given to you by PayPal when you set up a sandbox with your developer account. You can use the sandbox to test your purchase flow.', 'elementor-pro' ),
 				'label_block' => true,

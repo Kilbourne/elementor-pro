@@ -39,6 +39,20 @@ class Purchase_Summary extends Base_Widget {
 		return [ 'woocommerce-elements' ];
 	}
 
+	/**
+	 * Get style dependencies.
+	 *
+	 * Retrieve the list of style dependencies the widget requires.
+	 *
+	 * @since 3.24.0
+	 * @access public
+	 *
+	 * @return array Widget style dependencies.
+	 */
+	public function get_style_depends(): array {
+		return [ 'widget-woocommerce' ];
+	}
+
 	protected function register_controls() {
 		$this->start_controls_section(
 			'confirmation_message',
@@ -122,6 +136,9 @@ class Purchase_Summary extends Base_Widget {
 				'dynamic' => [
 					'active' => true,
 				],
+				'ai' => [
+					'active' => false,
+				],
 				'default' => esc_html__( 'Order Number:', 'elementor-pro' ),
 			]
 		);
@@ -133,6 +150,9 @@ class Purchase_Summary extends Base_Widget {
 				'type' => Controls_Manager::TEXT,
 				'dynamic' => [
 					'active' => true,
+				],
+				'ai' => [
+					'active' => false,
 				],
 				'default' => esc_html__( 'Order Date:', 'elementor-pro' ),
 			]
@@ -146,6 +166,9 @@ class Purchase_Summary extends Base_Widget {
 				'dynamic' => [
 					'active' => true,
 				],
+				'ai' => [
+					'active' => false,
+				],
 				'default' => esc_html__( 'Order Email:', 'elementor-pro' ),
 			]
 		);
@@ -158,6 +181,9 @@ class Purchase_Summary extends Base_Widget {
 				'dynamic' => [
 					'active' => true,
 				],
+				'ai' => [
+					'active' => false,
+				],
 				'default' => esc_html__( 'Order Total:', 'elementor-pro' ),
 			]
 		);
@@ -169,6 +195,9 @@ class Purchase_Summary extends Base_Widget {
 				'type' => Controls_Manager::TEXT,
 				'dynamic' => [
 					'active' => true,
+				],
+				'ai' => [
+					'active' => false,
 				],
 				'default' => esc_html__( 'Payment Method:', 'elementor-pro' ),
 			]
@@ -190,6 +219,9 @@ class Purchase_Summary extends Base_Widget {
 				'type' => Controls_Manager::TEXT,
 				'dynamic' => [
 					'active' => true,
+				],
+				'ai' => [
+					'active' => false,
 				],
 				'default' => esc_html__( 'Our Bank Details', 'elementor-pro' ),
 			]
@@ -237,6 +269,9 @@ class Purchase_Summary extends Base_Widget {
 				'dynamic' => [
 					'active' => true,
 				],
+				'ai' => [
+					'active' => false,
+				],
 				'default' => esc_html__( 'Downloads', 'elementor-pro' ),
 			]
 		);
@@ -282,6 +317,9 @@ class Purchase_Summary extends Base_Widget {
 				'type' => Controls_Manager::TEXT,
 				'dynamic' => [
 					'active' => true,
+				],
+				'ai' => [
+					'active' => false,
 				],
 				'default' => esc_html__( 'Order Details', 'elementor-pro' ),
 			]
@@ -329,6 +367,9 @@ class Purchase_Summary extends Base_Widget {
 				'dynamic' => [
 					'active' => true,
 				],
+				'ai' => [
+					'active' => false,
+				],
 				'default' => esc_html__( 'Billing Details', 'elementor-pro' ),
 			]
 		);
@@ -374,6 +415,9 @@ class Purchase_Summary extends Base_Widget {
 				'type' => Controls_Manager::TEXT,
 				'dynamic' => [
 					'active' => true,
+				],
+				'ai' => [
+					'active' => false,
 				],
 				'default' => esc_html__( 'Shipping Details', 'elementor-pro' ),
 			]
@@ -432,6 +476,9 @@ class Purchase_Summary extends Base_Widget {
 				'type' => Controls_Manager::TEXT,
 				'condition' => [
 					'preview_order_type' => 'custom-order',
+				],
+				'ai' => [
+					'active' => false,
 				],
 				'render_type' => 'template',
 				'description' => esc_html__( 'Note: To find an order ID, go to the WP dashboard: WooCommerce > Orders', 'elementor-pro' ),
@@ -540,8 +587,13 @@ class Purchase_Summary extends Base_Widget {
 				'size_units' => [ 'px', '%', 'em', 'rem', 'vw', 'custom' ],
 				'range' => [
 					'px' => [
-						'min' => 0,
 						'max' => 100,
+					],
+					'em' => [
+						'max' => 10,
+					],
+					'rem' => [
+						'max' => 10,
 					],
 				],
 				'selectors' => [
@@ -638,8 +690,13 @@ class Purchase_Summary extends Base_Widget {
 				'size_units' => [ 'px', '%', 'em', 'rem', 'vw', 'custom' ],
 				'range' => [
 					'px' => [
-						'min' => 0,
 						'max' => 100,
+					],
+					'em' => [
+						'max' => 10,
+					],
+					'rem' => [
+						'max' => 10,
 					],
 				],
 				'selectors' => [
@@ -693,8 +750,13 @@ class Purchase_Summary extends Base_Widget {
 				'size_units' => [ 'px', 'em', 'rem', 'custom' ],
 				'range' => [
 					'px' => [
-						'min' => 0,
-						'max' => 75,
+						'max' => 100,
+					],
+					'em' => [
+						'max' => 10,
+					],
+					'rem' => [
+						'max' => 10,
 					],
 				],
 				'selectors' => [
@@ -750,8 +812,13 @@ class Purchase_Summary extends Base_Widget {
 				'size_units' => [ 'px', '%', 'em', 'rem', 'vw', 'custom' ],
 				'range' => [
 					'px' => [
-						'min' => 0,
 						'max' => 100,
+					],
+					'em' => [
+						'max' => 10,
+					],
+					'rem' => [
+						'max' => 10,
 					],
 				],
 				'selectors' => [
@@ -819,8 +886,13 @@ class Purchase_Summary extends Base_Widget {
 				'size_units' => [ 'px', '%', 'em', 'rem', 'vw', 'custom' ],
 				'range' => [
 					'px' => [
-						'min' => 0,
 						'max' => 100,
+					],
+					'em' => [
+						'max' => 10,
+					],
+					'rem' => [
+						'max' => 10,
 					],
 				],
 				'selectors' => [
@@ -865,8 +937,13 @@ class Purchase_Summary extends Base_Widget {
 				'size_units' => [ 'px', 'em', 'rem', 'custom' ],
 				'range' => [
 					'px' => [
-						'min' => 0,
-						'max' => 75,
+						'max' => 100,
+					],
+					'em' => [
+						'max' => 10,
+					],
+					'rem' => [
+						'max' => 10,
 					],
 				],
 				'selectors' => [
@@ -919,8 +996,13 @@ class Purchase_Summary extends Base_Widget {
 				'size_units' => [ 'px', '%', 'em', 'rem', 'vw', 'custom' ],
 				'range' => [
 					'px' => [
-						'min' => 0,
 						'max' => 100,
+					],
+					'em' => [
+						'max' => 10,
+					],
+					'rem' => [
+						'max' => 10,
 					],
 				],
 				'selectors' => [
@@ -975,8 +1057,13 @@ class Purchase_Summary extends Base_Widget {
 				'size_units' => [ 'px', '%', 'em', 'rem', 'vw', 'custom' ],
 				'range' => [
 					'px' => [
-						'min' => 0,
 						'max' => 100,
+					],
+					'em' => [
+						'max' => 10,
+					],
+					'rem' => [
+						'max' => 10,
 					],
 				],
 				'selectors' => [
@@ -1044,8 +1131,13 @@ class Purchase_Summary extends Base_Widget {
 				'size_units' => [ 'px', '%', 'em', 'rem', 'vw', 'custom' ],
 				'range' => [
 					'px' => [
-						'min' => 0,
 						'max' => 100,
+					],
+					'em' => [
+						'max' => 10,
+					],
+					'rem' => [
+						'max' => 10,
 					],
 				],
 				'selectors' => [
@@ -1090,8 +1182,13 @@ class Purchase_Summary extends Base_Widget {
 				'size_units' => [ 'px', 'em', 'rem', 'custom' ],
 				'range' => [
 					'px' => [
-						'min' => 0,
-						'max' => 60,
+						'max' => 50,
+					],
+					'em' => [
+						'max' => 5,
+					],
+					'rem' => [
+						'max' => 5,
 					],
 				],
 				'selectors' => [
@@ -1260,8 +1357,13 @@ class Purchase_Summary extends Base_Widget {
 				'size_units' => [ 'px', '%', 'em', 'rem', 'vw', 'custom' ],
 				'range' => [
 					'px' => [
-						'min' => 0,
 						'max' => 100,
+					],
+					'em' => [
+						'max' => 10,
+					],
+					'rem' => [
+						'max' => 10,
 					],
 				],
 				'selectors' => [
@@ -1401,6 +1503,7 @@ class Purchase_Summary extends Base_Widget {
 					'px' => [
 						'min' => 0,
 						'max' => 3000,
+						'step' => 100,
 					],
 				],
 			]

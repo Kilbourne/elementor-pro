@@ -12,6 +12,7 @@ use Elementor\Icons_Manager;
 use Elementor\Skin_Base as Elementor_Skin_Base;
 use Elementor\Utils;
 use Elementor\Widget_Base;
+use ElementorPro\Modules\LoopBuilder\Providers\Taxonomy_Loop_Provider;
 use ElementorPro\Modules\Posts\Traits\Button_Widget_Trait;
 use ElementorPro\Plugin;
 use ElementorPro\Modules\Posts\Widgets\Posts_Base;
@@ -151,6 +152,14 @@ abstract class Skin_Base extends Elementor_Skin_Base {
 					'px' => [
 						'min' => 10,
 						'max' => 600,
+					],
+					'em' => [
+						'min' => 1,
+						'max' => 60,
+					],
+					'rem' => [
+						'min' => 1,
+						'max' => 60,
 					],
 				],
 				'default' => [
@@ -308,6 +317,9 @@ abstract class Skin_Base extends Elementor_Skin_Base {
 				'dynamic' => [
 					'active' => true,
 				],
+				'ai' => [
+					'active' => false,
+				],
 				'default' => esc_html__( 'Read More »', 'elementor-pro' ),
 				'condition' => [
 					$this->get_control_id( 'show_read_more' ) => 'yes',
@@ -423,8 +435,13 @@ abstract class Skin_Base extends Elementor_Skin_Base {
 				],
 				'range' => [
 					'px' => [
-						'min' => 0,
 						'max' => 100,
+					],
+					'em' => [
+						'max' => 10,
+					],
+					'rem' => [
+						'max' => 10,
 					],
 				],
 				'selectors' => [
@@ -444,8 +461,13 @@ abstract class Skin_Base extends Elementor_Skin_Base {
 				],
 				'range' => [
 					'px' => [
-						'min' => 0,
 						'max' => 100,
+					],
+					'em' => [
+						'max' => 10,
+					],
+					'rem' => [
+						'max' => 10,
 					],
 				],
 				'frontend_available' => true,
@@ -517,6 +539,12 @@ abstract class Skin_Base extends Elementor_Skin_Base {
 				'range' => [
 					'px' => [
 						'max' => 100,
+					],
+					'em' => [
+						'max' => 10,
+					],
+					'rem' => [
+						'max' => 10,
 					],
 				],
 				'selectors' => [
@@ -641,6 +669,12 @@ abstract class Skin_Base extends Elementor_Skin_Base {
 					'px' => [
 						'max' => 100,
 					],
+					'em' => [
+						'max' => 10,
+					],
+					'rem' => [
+						'max' => 10,
+					],
 				],
 				'selectors' => [
 					'{{WRAPPER}} .elementor-post__title' => 'margin-bottom: {{SIZE}}{{UNIT}};',
@@ -715,6 +749,12 @@ abstract class Skin_Base extends Elementor_Skin_Base {
 					'px' => [
 						'max' => 100,
 					],
+					'em' => [
+						'max' => 10,
+					],
+					'rem' => [
+						'max' => 10,
+					],
 				],
 				'selectors' => [
 					'{{WRAPPER}} .elementor-post__meta-data' => 'margin-bottom: {{SIZE}}{{UNIT}};',
@@ -774,6 +814,12 @@ abstract class Skin_Base extends Elementor_Skin_Base {
 				'range' => [
 					'px' => [
 						'max' => 100,
+					],
+					'em' => [
+						'max' => 10,
+					],
+					'rem' => [
+						'max' => 10,
 					],
 				],
 				'selectors' => [
@@ -838,6 +884,12 @@ abstract class Skin_Base extends Elementor_Skin_Base {
 				'range' => [
 					'px' => [
 						'max' => 100,
+					],
+					'em' => [
+						'max' => 10,
+					],
+					'rem' => [
+						'max' => 10,
 					],
 				],
 				'selectors' => [
@@ -1040,11 +1092,11 @@ abstract class Skin_Base extends Elementor_Skin_Base {
 	protected function render_loop_header() {
 		$classes = $this->get_loop_header_widget_classes();
 
-		/** @var \WP_Query $wp_query */
-		$wp_query = $this->parent->get_query();
+		/** @var \WP_Query $e_wp_query */
+		$e_wp_query = $this->parent->get_query();
 
 		// Use grid only if found posts.
-		if ( $wp_query->found_posts ) {
+		if ( isset( $e_wp_query->found_posts ) || Taxonomy_Loop_Provider::is_loop_taxonomy() ) {
 			$classes[] = 'elementor-grid';
 		}
 

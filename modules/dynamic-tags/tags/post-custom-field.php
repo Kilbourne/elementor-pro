@@ -61,9 +61,22 @@ class Post_Custom_Field extends Tag {
 				'condition' => [
 					'key' => '',
 				],
+				'ai' => [
+					'active' => false,
+				],
 			]
 		);
 
+	}
+
+	public function get_custom_field_value( string $key ) : string {
+		$value = get_post_meta( get_the_ID(), $key, true );
+
+		if ( ! is_string( $value ) ) {
+			return '';
+		}
+
+		return $value;
 	}
 
 	public function render() {
@@ -77,7 +90,11 @@ class Post_Custom_Field extends Tag {
 			return;
 		}
 
-		$value = get_post_meta( get_the_ID(), $key, true );
+		$value = $this->get_custom_field_value( $key );
+
+		if ( empty( $value ) ) {
+			return;
+		}
 
 		echo wp_kses_post( $value );
 	}

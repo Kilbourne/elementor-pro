@@ -35,6 +35,8 @@ class Module extends Module_Base {
 
 	const ACTIVITY_LOG_LICENSE_FEATURE_NAME = 'activity-log';
 	const CF7DB_LICENSE_FEATURE_NAME = 'cf7db';
+	const AKISMET_LICENSE_FEATURE_NAME = 'akismet';
+
 	const WIDGET_NAME_CLASS_NAME_MAP = [
 		'form' => 'Form',
 		'login' => 'Login',
@@ -49,12 +51,29 @@ class Module extends Module_Base {
 	}
 
 	/**
-	 * @deprecated 3.1.0
+	 * Get the base URL for assets.
+	 *
+	 * @return string
 	 */
-	public function localize_settings() {
-		Plugin::elementor()->modules_manager->get_modules( 'dev-tools' )->deprecation->deprecated_function( __METHOD__, '3.1.0' );
+	public function get_assets_base_url(): string {
+		return ELEMENTOR_PRO_URL;
+	}
 
-		return [];
+	/**
+	 * Register styles.
+	 *
+	 * At build time, Elementor compiles `/modules/forms/assets/scss/frontend.scss`
+	 * to `/assets/css/widget-forms.min.css`.
+	 *
+	 * @return void
+	 */
+	public function register_styles() {
+		wp_register_style(
+			'widget-forms',
+			$this->get_css_assets_url( 'widget-forms', null, true, true ),
+			[ 'elementor-frontend' ],
+			ELEMENTOR_PRO_VERSION
+		);
 	}
 
 	public static function find_element_recursive( $elements, $form_id ) {
@@ -174,12 +193,18 @@ class Module extends Module_Base {
 	public function __construct() {
 		parent::__construct();
 
+		add_action( 'elementor/frontend/after_register_styles', [ $this, 'register_styles' ] );
 		add_action( 'elementor/controls/register', [ $this, 'register_controls' ] );
 		add_action( 'elementor/ajax/register_actions', [ $this, 'register_ajax_actions' ] );
 
 		$this->add_component( 'recaptcha', new Classes\Recaptcha_Handler() );
 		$this->add_component( 'recaptcha_v3', new Classes\Recaptcha_V3_Handler() );
 		$this->add_component( 'honeypot', new Classes\Honeypot_Handler() );
+
+		// Akismet
+		if ( class_exists( '\Akismet' ) && API::is_licence_has_feature( static::AKISMET_LICENSE_FEATURE_NAME, API::BC_VALIDATION_CALLBACK ) ) {
+			$this->add_component( 'akismet', new Classes\Akismet() );
+		}
 
 		if ( API::is_licence_has_feature( Form_Submissions_Component::NAME, API::BC_VALIDATION_CALLBACK ) ) {
 			$this->register_submissions_component();

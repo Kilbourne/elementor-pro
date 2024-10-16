@@ -32,11 +32,18 @@ class Search_Form extends Base {
 		return [ 'search', 'form' ];
 	}
 
-	public function get_style_depends() {
+	public function show_in_panel(): bool {
+		return false;
+	}
+
+	public function get_style_depends(): array {
+		$style_depends = [ 'widget-theme-elements' ];
+
 		if ( Icons_Manager::is_migration_allowed() ) {
-			return [ 'elementor-icons-fa-solid' ];
+			$style_depends[] = 'elementor-icons-fa-solid';
 		}
-		return [];
+
+		return $style_depends;
 	}
 
 	protected function register_controls() {
@@ -45,6 +52,12 @@ class Search_Form extends Base {
 			[
 				'label' => esc_html__( 'Search Form', 'elementor-pro' ),
 			]
+		);
+
+		$this->add_deprecation_message(
+			'3.24.0',
+			esc_html__( 'You are currently editing a Search Form Widget in its old version. Any new Search widget dragged into the canvas will be the new Search widget, with the improved search capabilities.', 'elementor-pro' ),
+			'search'
 		);
 
 		$this->add_control(
@@ -243,7 +256,6 @@ class Search_Form extends Base {
 				'type' => Controls_Manager::SLIDER,
 				'range' => [
 					'px' => [
-						'min' => 0,
 						'max' => 100,
 					],
 				],
@@ -444,8 +456,13 @@ class Search_Form extends Base {
 				'size_units' => [ 'px', '%', 'em', 'rem', 'custom' ],
 				'range' => [
 					'px' => [
-						'min' => 0,
 						'max' => 200,
+					],
+					'em' => [
+						'max' => 20,
+					],
+					'rem' => [
+						'max' => 20,
 					],
 				],
 				'default' => [
@@ -563,7 +580,6 @@ class Search_Form extends Base {
 				'type' => Controls_Manager::SLIDER,
 				'range' => [
 					'px' => [
-						'min' => 0,
 						'max' => 100,
 					],
 				],
@@ -701,6 +717,9 @@ class Search_Form extends Base {
 					'em' => [
 						'max' => 2,
 					],
+					'rem' => [
+						'max' => 2,
+					],
 				],
 				'selectors' => [
 					'{{WRAPPER}} .elementor-search-form__toggle' => '--e-search-form-toggle-border-width: {{SIZE}}{{UNIT}}',
@@ -731,7 +750,7 @@ class Search_Form extends Base {
 			'form',
 			[
 				'class' => 'elementor-search-form',
-				'action' => home_url(),
+				'action' => esc_url( home_url() ),
 				'method' => 'get',
 			]
 		);
@@ -861,8 +880,7 @@ class Search_Form extends Base {
 			'form',
 			{
 				'class': 'elementor-search-form',
-				'action': '<?php // PHPCS - the method home_url is safe.
-					echo home_url(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>',
+				'action': '<?php echo esc_url( home_url() ); ?>',
 				'method': 'get',
 			}
 		);

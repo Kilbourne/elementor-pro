@@ -47,6 +47,20 @@ class Portfolio extends Base_Widget {
 		return [ 'imagesloaded' ];
 	}
 
+	/**
+	 * Get style dependencies.
+	 *
+	 * Retrieve the list of style dependencies the widget requires.
+	 *
+	 * @since 3.24.0
+	 * @access public
+	 *
+	 * @return array Widget style dependencies.
+	 */
+	public function get_style_depends(): array {
+		return [ 'widget-posts' ];
+	}
+
 	public function on_import( $element ) {
 		if ( isset( $element['settings']['posts_post_type'] ) && ! get_post_type_object( $element['settings']['posts_post_type'] ) ) {
 			$element['settings']['posts_post_type'] = 'post';
@@ -283,8 +297,13 @@ class Portfolio extends Base_Widget {
 				'size_units' => [ 'px', 'em', 'rem', 'custom' ],
 				'range' => [
 					'px' => [
-						'min' => 0,
 						'max' => 100,
+					],
+					'em' => [
+						'max' => 10,
+					],
+					'rem' => [
+						'max' => 10,
 					],
 				],
 				'selectors' => [
@@ -301,8 +320,13 @@ class Portfolio extends Base_Widget {
 				'size_units' => [ 'px', 'em', 'rem', 'custom' ],
 				'range' => [
 					'px' => [
-						'min' => 0,
 						'max' => 100,
+					],
+					'em' => [
+						'max' => 10,
+					],
+					'rem' => [
+						'max' => 10,
 					],
 				],
 				'frontend_available' => true,
@@ -440,8 +464,13 @@ class Portfolio extends Base_Widget {
 				],
 				'range' => [
 					'px' => [
-						'min' => 0,
 						'max' => 100,
+					],
+					'em' => [
+						'max' => 10,
+					],
+					'rem' => [
+						'max' => 10,
 					],
 				],
 				'selectors' => [
@@ -462,8 +491,13 @@ class Portfolio extends Base_Widget {
 				],
 				'range' => [
 					'px' => [
-						'min' => 0,
 						'max' => 100,
+					],
+					'em' => [
+						'max' => 10,
+					],
+					'rem' => [
+						'max' => 10,
 					],
 				],
 				'selectors' => [
@@ -580,9 +614,9 @@ class Portfolio extends Base_Widget {
 
 		?>
 		<ul class="elementor-portfolio__filters">
-			<li class="elementor-portfolio__filter elementor-active" data-filter="__all"><?php echo esc_html__( 'All', 'elementor-pro' ); ?></li>
+			<li class="elementor-portfolio__filter elementor-active" tabindex="0" data-filter="__all"><?php echo esc_html__( 'All', 'elementor-pro' ); ?></li>
 			<?php foreach ( $terms as $term ) { ?>
-				<li class="elementor-portfolio__filter" data-filter="<?php echo esc_attr( $term->term_id ); ?>"><?php echo esc_html( $term->name ); ?></li>
+				<li class="elementor-portfolio__filter" tabindex="0" data-filter="<?php echo esc_attr( $term->term_id ); ?>"><?php echo esc_html( $term->name ); ?></li>
 			<?php } ?>
 		</ul>
 		<?php

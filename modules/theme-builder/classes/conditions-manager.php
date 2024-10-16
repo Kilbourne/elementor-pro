@@ -38,6 +38,9 @@ class Conditions_Manager {
 
 		add_action( 'manage_' . Source_Local::CPT . '_posts_columns', [ $this, 'admin_columns_headers' ] );
 		add_action( 'manage_' . Source_Local::CPT . '_posts_custom_column', [ $this, 'admin_columns_content' ], 10, 2 );
+
+		add_action( 'manage_e-floating-buttons_posts_columns', [ $this, 'admin_columns_headers' ] );
+		add_action( 'manage_e-floating-buttons_posts_custom_column', [ $this, 'admin_columns_content' ], 10, 2 );
 	}
 
 	public function on_untrash_post( $post_id ) {
@@ -305,9 +308,12 @@ class Conditions_Manager {
 
 		$document = $theme_builder_module->get_document( $post_id );
 
+		if ( ! $document ) {
+			return false;
+		}
+
 		if ( empty( $conditions_to_save ) ) {
-			// TODO: $document->delete_meta.
-			$is_saved = delete_post_meta( $post_id, '_elementor_conditions' );
+			$is_saved = $document->delete_meta( '_elementor_conditions' );
 		} else {
 			$is_saved = $document->update_meta( '_elementor_conditions', $conditions_to_save );
 		}

@@ -40,14 +40,15 @@ class Share_Buttons extends Base_Widget {
 		],
 	];
 
-	public function get_style_depends() {
+	public function get_style_depends(): array {
+		$style_depends = [ 'widget-share-buttons', 'e-apple-webkit' ];
+
 		if ( Icons_Manager::is_migration_allowed() ) {
-			return [
-				'elementor-icons-fa-solid',
-				'elementor-icons-fa-brands',
-			];
+			$style_depends[] = 'elementor-icons-fa-solid';
+			$style_depends[] = 'elementor-icons-fa-brands';
 		}
-		return [];
+
+		return $style_depends;
 	}
 
 	private static function get_network_icon_data( $network_name ) {
@@ -85,6 +86,10 @@ class Share_Buttons extends Base_Widget {
 
 	public function get_keywords() {
 		return [ 'sharing', 'social', 'icon', 'button', 'like' ];
+	}
+
+	protected function is_dynamic_content(): bool {
+		return false;
 	}
 
 	protected function register_controls() {
@@ -290,7 +295,6 @@ class Share_Buttons extends Base_Widget {
 					'active' => true,
 				],
 				'options' => false,
-				'placeholder' => esc_html__( 'https://your-link.com', 'elementor-pro' ),
 				'condition' => [
 					'share_url_type' => 'custom',
 				],
@@ -368,14 +372,14 @@ class Share_Buttons extends Base_Widget {
 				'type' => Controls_Manager::SLIDER,
 				'size_units' => [ 'px', 'em', 'rem', 'custom' ],
 				'range' => [
-					'em' => [
-						'min' => 0.5,
-						'max' => 4,
-						'step' => 0.1,
-					],
 					'px' => [
-						'min' => 0,
 						'max' => 100,
+					],
+					'em' => [
+						'max' => 10,
+					],
+					'rem' => [
+						'max' => 10,
 					],
 				],
 				'default' => [
@@ -403,14 +407,14 @@ class Share_Buttons extends Base_Widget {
 				'type' => Controls_Manager::SLIDER,
 				'size_units' => [ 'px', 'em', 'rem', 'vh', 'custom' ],
 				'range' => [
-					'em' => [
-						'min' => 1,
-						'max' => 7,
-						'step' => 0.1,
-					],
 					'px' => [
-						'min' => 0,
 						'max' => 100,
+					],
+					'em' => [
+						'max' => 10,
+					],
+					'rem' => [
+						'max' => 10,
 					],
 				],
 				'default' => [
@@ -442,6 +446,9 @@ class Share_Buttons extends Base_Widget {
 						'max' => 20,
 					],
 					'em' => [
+						'max' => 2,
+					],
+					'rem' => [
 						'max' => 2,
 					],
 				],

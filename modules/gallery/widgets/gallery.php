@@ -43,12 +43,16 @@ class Gallery extends Base_Widget {
 		return [ 'elementor-gallery' ];
 	}
 
-	public function get_style_depends() {
-		return [ 'elementor-gallery' ];
+	public function get_style_depends(): array {
+		return [ 'widget-gallery', 'elementor-gallery' ];
 	}
 
 	public function get_icon() {
 		return 'eicon-gallery-justified';
+	}
+
+	protected function is_dynamic_content(): bool {
+		return false;
 	}
 
 	public function get_inline_css_depends() {
@@ -365,6 +369,9 @@ class Gallery extends Base_Widget {
 				'dynamic' => [
 					'active' => true,
 				],
+				'ai' => [
+					'active' => false,
+				],
 			]
 		);
 
@@ -565,6 +572,9 @@ class Gallery extends Base_Widget {
 					'em' => [
 						'max' => 2,
 					],
+					'em' => [
+						'max' => 2,
+					],
 				],
 				'selectors' => [
 					'{{WRAPPER}}' => '--image-border-width: {{SIZE}}{{UNIT}};',
@@ -669,6 +679,7 @@ class Gallery extends Base_Widget {
 					'px' => [
 						'min' => 0,
 						'max' => 3000,
+						'step' => 100,
 					],
 				],
 				'selectors' => [
@@ -830,6 +841,7 @@ class Gallery extends Base_Widget {
 					'px' => [
 						'min' => 0,
 						'max' => 3000,
+						'step' => 100,
 					],
 				],
 				'selectors' => [
@@ -1082,6 +1094,7 @@ class Gallery extends Base_Widget {
 					'px' => [
 						'min' => 0,
 						'max' => 3000,
+						'step' => 100,
 					],
 				],
 				'selectors' => [
@@ -1541,7 +1554,7 @@ class Gallery extends Base_Widget {
 						$href = $image_data['media'];
 
 						$this->add_render_attribute( 'gallery_item_' . $unique_index, [
-							'href' => $href,
+							'href' => esc_url( $href ),
 						] );
 
 						if ( Plugin::elementor()->editor->is_edit_mode() ) {

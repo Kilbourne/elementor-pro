@@ -31,6 +31,24 @@ class Video_Playlist extends Base_Widget {
 		return 'eicon-video-playlist';
 	}
 
+	protected function is_dynamic_content(): bool {
+		return false;
+	}
+
+	/**
+	 * Get style dependencies.
+	 *
+	 * Retrieve the list of style dependencies the widget requires.
+	 *
+	 * @since 3.24.0
+	 * @access public
+	 *
+	 * @return array Widget style dependencies.
+	 */
+	public function get_style_depends(): array {
+		return [ 'widget-video-playlist' ];
+	}
+
 	protected function register_controls() {
 		$start = is_rtl() ? 'right' : 'left';
 		$end = is_rtl() ? 'left' : 'right';
@@ -114,6 +132,9 @@ class Video_Playlist extends Base_Widget {
 				'dynamic' => [
 					'active' => true,
 				],
+				'ai' => [
+					'active' => false,
+				],
 				'placeholder' => esc_html__( 'Paste URL', 'elementor-pro' ) . ' (YouTube)',
 				'label_block' => true,
 				'condition' => [
@@ -134,6 +155,9 @@ class Video_Playlist extends Base_Widget {
 						TagsModule::URL_CATEGORY,
 					],
 				],
+				'ai' => [
+					'active' => false,
+				],
 				'placeholder' => esc_html__( 'Enter your URL', 'elementor-pro' ) . ' (Vimeo)',
 				'default' => 'https://vimeo.com/235215203',
 				'label_block' => true,
@@ -149,7 +173,6 @@ class Video_Playlist extends Base_Widget {
 				'type' => Controls_Manager::BUTTON,
 				'label_block' => true,
 				'text' => esc_html__( 'Get Video Data', 'elementor-pro' ),
-				'separator' => 'none',
 				'event' => 'elementorPlaylistWidget:fetchVideoData',
 				'condition' => [
 					'type' => [ 'youtube', 'vimeo' ],
@@ -277,6 +300,9 @@ class Video_Playlist extends Base_Widget {
 				'type' => Controls_Manager::TEXT,
 				'placeholder' => '1:05',
 				'default' => '',
+				'ai' => [
+					'active' => false,
+				],
 				'condition' => [
 					'type!' => 'section',
 				],
@@ -420,6 +446,9 @@ class Video_Playlist extends Base_Widget {
 				'dynamic' => [
 					'active' => true,
 				],
+				'ai' => [
+					'active' => false,
+				],
 				'placeholder' => esc_html__( 'Name', 'elementor-pro' ),
 				'frontend_available' => true,
 			]
@@ -433,6 +462,9 @@ class Video_Playlist extends Base_Widget {
 				'default' => esc_html__( 'Tab #2', 'elementor-pro' ),
 				'dynamic' => [
 					'active' => true,
+				],
+				'ai' => [
+					'active' => false,
 				],
 				'placeholder' => esc_html__( 'Name', 'elementor-pro' ),
 				'frontend_available' => true,
@@ -461,6 +493,9 @@ class Video_Playlist extends Base_Widget {
 				'dynamic' => [
 					'active' => true,
 				],
+				'ai' => [
+					'active' => false,
+				],
 				'placeholder' => esc_html__( 'Show More', 'elementor-pro' ),
 				'default' => esc_html__( 'Show More', 'elementor-pro' ),
 				'condition' => [
@@ -477,6 +512,9 @@ class Video_Playlist extends Base_Widget {
 				'dynamic' => [
 					'active' => true,
 				],
+				'ai' => [
+					'active' => false,
+				],
 				'placeholder' => esc_html__( 'Show Less', 'elementor-pro' ),
 				'default' => esc_html__( 'Show Less', 'elementor-pro' ),
 				'condition' => [
@@ -490,19 +528,27 @@ class Video_Playlist extends Base_Widget {
 			[
 				'label' => esc_html__( 'Height', 'elementor-pro' ),
 				'type' => Controls_Manager::SLIDER,
-				'default' => [
-					'size' => '54',
-				],
 				'size_units' => [ 'px', 'em', 'rem', 'vh', 'custom' ],
+				'default' => [
+					'size' => 54,
+				],
 				'range' => [
 					'px' => [
-						'min' => 54,
+						'min' => 50,
 						'max' => 500,
+					],
+					'em' => [
+						'min' => 5,
+						'max' => 50,
+					],
+					'rem' => [
+						'min' => 5,
+						'max' => 50,
 					],
 				],
 				'render_type' => 'template',
 				'selectors' => [
-					'{{WRAPPER}} .collapsible .e-inner-tab-text' => 'height: {{SIZE}}{{UNIT}};',
+					'{{WRAPPER}} .e-inner-tabs-content-wrapper .collapsible .e-inner-tab-text' => 'height: {{SIZE}}{{UNIT}};',
 				],
 				'condition' => [
 					'inner_tab_is_content_collapsible' => 'collapsible',
@@ -552,7 +598,6 @@ class Video_Playlist extends Base_Widget {
 			[
 				'name' => 'image_overlay',
 				'default' => 'full',
-				'separator' => 'none',
 				'condition' => [
 					'show_image_overlay' => 'yes',
 				],
@@ -738,13 +783,13 @@ class Video_Playlist extends Base_Widget {
 						'min' => 200,
 						'max' => 1200,
 					],
-					'vh' => [
-						'min' => 10,
-						'max' => 100,
+					'em' => [
+						'min' => 20,
+						'max' => 120,
 					],
-					'vw' => [
-						'min' => 10,
-						'max' => 100,
+					'rem' => [
+						'min' => 20,
+						'max' => 120,
 					],
 				],
 				'selectors' => [
@@ -777,7 +822,7 @@ class Video_Playlist extends Base_Widget {
 				'label' => esc_html__( 'Background', 'elementor-pro' ),
 				'type' => Controls_Manager::COLOR,
 				'selectors' => [
-					'{{WRAPPER}} .e-tabs-header' => 'background-color: {{VALUE}};',
+					'{{WRAPPER}} .e-tabs-wrapper .e-tabs-header' => 'background-color: {{VALUE}};',
 				],
 			]
 		);
@@ -789,7 +834,7 @@ class Video_Playlist extends Base_Widget {
 				'type' => Controls_Manager::COLOR,
 				'default' => '',
 				'selectors' => [
-					'{{WRAPPER}} .e-tabs-header .e-tabs-title' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .e-tabs-wrapper .e-tabs-header .e-tabs-title' => 'color: {{VALUE}};',
 				],
 				'global' => [
 					'default' => Global_Colors::COLOR_TEXT,
@@ -820,9 +865,9 @@ class Video_Playlist extends Base_Widget {
 				'type' => Controls_Manager::COLOR,
 				'default' => '',
 				'selectors' => [
-					'{{WRAPPER}} .e-tabs-header .e-tabs-videos-count' => 'color: {{VALUE}};',
-					'{{WRAPPER}} .e-tabs-header .e-tabs-header-right-side i' => 'color: {{VALUE}};',
-					'{{WRAPPER}} .e-tabs-header .e-tabs-header-right-side svg' => 'fill: {{VALUE}};',
+					'{{WRAPPER}} .e-tabs-wrapper .e-tabs-header .e-tabs-videos-count' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .e-tabs-wrapper .e-tabs-header .e-tabs-header-right-side i' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .e-tabs-wrapper .e-tabs-header .e-tabs-header-right-side svg' => 'fill: {{VALUE}};',
 				],
 				'global' => [
 					'default' => Global_Colors::COLOR_TEXT,
@@ -871,10 +916,10 @@ class Video_Playlist extends Base_Widget {
 				'label' => esc_html__( 'Background', 'elementor-pro' ),
 				'type' => Controls_Manager::COLOR,
 				'selectors' => [
-					'{{WRAPPER}} .e-tab-title' => 'background-color: {{VALUE}};',
-					'{{WRAPPER}} .e-tabs-items-wrapper' => 'background-color: {{VALUE}};',
-					'{{WRAPPER}} .e-tabs-items-wrapper .shadow-bottom' => 'background: linear-gradient(180deg, transparent 0%, {{VALUE}} 100%)',
-					'{{WRAPPER}} .e-tabs-items-wrapper .shadow-top' => 'background: linear-gradient(0deg, transparent 0%, {{VALUE}} 100%);',
+					'{{WRAPPER}} .e-tabs-items .e-tab-title:not(:where( .e-active ))' => 'background-color: {{VALUE}};',
+					'{{WRAPPER}} .e-tabs-wrapper .e-tabs-items-wrapper' => 'background-color: {{VALUE}};',
+					'{{WRAPPER}} .e-tabs-wrapper .e-tabs-items-wrapper .shadow-bottom' => 'background: linear-gradient(180deg, transparent 0%, {{VALUE}} 100%)',
+					'{{WRAPPER}} .e-tabs-wrapper .e-tabs-items-wrapper .shadow-top' => 'background: linear-gradient(0deg, transparent 0%, {{VALUE}} 100%);',
 				],
 			]
 		);
@@ -885,8 +930,8 @@ class Video_Playlist extends Base_Widget {
 				'label' => esc_html__( 'Color', 'elementor-pro' ),
 				'type' => Controls_Manager::COLOR,
 				'selectors' => [
-					'{{WRAPPER}} .e-tab-title .e-tab-title-text' => 'color: {{VALUE}};',
-					'{{WRAPPER}} .e-tab-title .e-tab-title-text a' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .e-tabs-items .e-tab-title .e-tab-title-text' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .e-tabs-items .e-tab-title .e-tab-title-text a' => 'color: {{VALUE}};',
 				],
 				'global' => [
 					'default' => Global_Colors::COLOR_TEXT,
@@ -898,7 +943,7 @@ class Video_Playlist extends Base_Widget {
 			Group_Control_Typography::get_type(),
 			[
 				'name' => 'normal_typography',
-				'selector' => '{{WRAPPER}} .e-tab-title .e-tab-title-text',
+				'selector' => '{{WRAPPER}} .e-tabs-items .e-tab-title .e-tab-title-text',
 				'global' => [
 					'default' => Global_Typography::TYPOGRAPHY_TEXT,
 				],
@@ -919,7 +964,7 @@ class Video_Playlist extends Base_Widget {
 				'label' => esc_html__( 'Color', 'elementor-pro' ),
 				'type' => Controls_Manager::COLOR,
 				'selectors' => [
-					'{{WRAPPER}} .e-tab-title .e-tab-duration' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .e-tabs-items .e-tab-title .e-tab-duration' => 'color: {{VALUE}};',
 				],
 				'global' => [
 					'default' => Global_Colors::COLOR_TEXT,
@@ -949,9 +994,9 @@ class Video_Playlist extends Base_Widget {
 				'label' => esc_html__( 'Color', 'elementor-pro' ),
 				'type' => Controls_Manager::COLOR,
 				'selectors' => [
-					'{{WRAPPER}} .e-tab-title i' => 'color: {{VALUE}};',
-					'{{WRAPPER}} .e-tab-title svg' => 'fill: {{VALUE}};',
-					'{{WRAPPER}} .e-tab-title svg path' => 'fill: {{VALUE}};',
+					'{{WRAPPER}} .e-tabs-items-wrapper .e-tab-title i' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .e-tabs-items-wrapper .e-tab-title svg' => 'fill: {{VALUE}};',
+					'{{WRAPPER}} .e-tabs-items-wrapper .e-tab-title svg path' => 'fill: {{VALUE}};',
 				],
 			]
 		);
@@ -967,8 +1012,8 @@ class Video_Playlist extends Base_Widget {
 					],
 					'text_shadow' => [
 						'selectors' => [
-							'{{WRAPPER}} .e-tab-title i' => 'text-shadow: {{HORIZONTAL}}px {{VERTICAL}}px {{BLUR}}px {{COLOR}};',
-							'{{WRAPPER}} .e-tab-title svg' => 'filter: drop-shadow({{HORIZONTAL}}px {{VERTICAL}}px {{BLUR}}px {{COLOR}});',
+							'{{WRAPPER}} .e-tabs-items-wrapper .e-tab-title i' => 'text-shadow: {{HORIZONTAL}}px {{VERTICAL}}px {{BLUR}}px {{COLOR}};',
+							'{{WRAPPER}} .e-tabs-items-wrapper .e-tab-title svg' => 'filter: drop-shadow({{HORIZONTAL}}px {{VERTICAL}}px {{BLUR}}px {{COLOR}});',
 						],
 					],
 				],
@@ -985,6 +1030,14 @@ class Video_Playlist extends Base_Widget {
 					'px' => [
 						'min' => 10,
 						'max' => 30,
+					],
+					'em' => [
+						'min' => 1,
+						'max' => 3,
+					],
+					'rem' => [
+						'min' => 1,
+						'max' => 3,
 					],
 				],
 				'selectors' => [
@@ -1017,7 +1070,7 @@ class Video_Playlist extends Base_Widget {
 					'groove' => _x( 'Groove', 'Border Control', 'elementor-pro' ),
 				],
 				'selectors' => [
-					'{{WRAPPER}} .e-tab-title' => 'border-style: {{VALUE}};',
+					'{{WRAPPER}} .e-tabs-items-wrapper .e-tab-title' => 'border-style: {{VALUE}};',
 				],
 			]
 		);
@@ -1030,12 +1083,17 @@ class Video_Playlist extends Base_Widget {
 				'size_units' => [ 'px', 'em', 'rem', 'vw', 'custom' ],
 				'range' => [
 					'px' => [
-						'min' => 0,
 						'max' => 10,
+					],
+					'em' => [
+						'max' => 1,
+					],
+					'rem' => [
+						'max' => 1,
 					],
 				],
 				'selectors' => [
-					'{{WRAPPER}} .e-tab-title' => 'border-width: 0 0 {{SIZE}}{{UNIT}} 0;',
+					'{{WRAPPER}} .e-tabs-items-wrapper .e-tab-title' => 'border-width: 0 0 {{SIZE}}{{UNIT}} 0;',
 				],
 				'condition' => [
 					'normal_separator_style!' => '',
@@ -1049,7 +1107,7 @@ class Video_Playlist extends Base_Widget {
 				'label' => esc_html__( 'Color', 'elementor-pro' ),
 				'type' => Controls_Manager::COLOR,
 				'selectors' => [
-					'{{WRAPPER}} .e-tab-title' => 'border-color: {{VALUE}};',
+					'{{WRAPPER}} .e-tabs-items-wrapper .e-tab-title' => 'border-color: {{VALUE}};',
 				],
 				'condition' => [
 					'normal_separator_style!' => '',
@@ -1080,7 +1138,7 @@ class Video_Playlist extends Base_Widget {
 				'label' => esc_html__( 'Background', 'elementor-pro' ),
 				'type' => Controls_Manager::COLOR,
 				'selectors' => [
-					'{{WRAPPER}} .e-tabs-items-wrapper .e-tabs-items .e-tab-title:where( .e-active, :hover )' => 'background-color: {{VALUE}};',
+					'{{WRAPPER}} .e-tabs-items-wrapper .e-tab-title:where( .e-active, :hover )' => 'background-color: {{VALUE}};',
 				],
 			]
 		);
@@ -1188,10 +1246,18 @@ class Video_Playlist extends Base_Widget {
 						'min' => 10,
 						'max' => 30,
 					],
+					'em' => [
+						'min' => 1,
+						'max' => 3,
+					],
+					'rem' => [
+						'min' => 1,
+						'max' => 3,
+					],
 				],
 				'selectors' => [
-					'{{WRAPPER}} .e-tab-title:where( .e-active, :hover ) span i' => 'font-size: {{SIZE}}{{UNIT}}',
-					'{{WRAPPER}} .e-tab-title:where( .e-active, :hover ) span svg' => 'width: {{SIZE}}{{UNIT}}; height: {{SIZE}}{{UNIT}};',
+					'{{WRAPPER}} .e-tabs-items-wrapper .e-tab-title:where( .e-active, :hover ) span i' => 'font-size: {{SIZE}}{{UNIT}}',
+					'{{WRAPPER}} .e-tabs-items-wrapper .e-tab-title:where( .e-active, :hover ) span svg' => 'width: {{SIZE}}{{UNIT}}; height: {{SIZE}}{{UNIT}};',
 				],
 			]
 		);
@@ -1233,8 +1299,13 @@ class Video_Playlist extends Base_Widget {
 				'size_units' => [ 'px', 'em', 'rem', 'vw', 'custom' ],
 				'range' => [
 					'px' => [
-						'min' => 0,
 						'max' => 10,
+					],
+					'em' => [
+						'max' => 1,
+					],
+					'rem' => [
+						'max' => 1,
 					],
 				],
 				'selectors' => [
@@ -1252,7 +1323,7 @@ class Video_Playlist extends Base_Widget {
 				'label' => esc_html__( 'Color', 'elementor-pro' ),
 				'type' => Controls_Manager::COLOR,
 				'selectors' => [
-					'{{WRAPPER}} .e-tabs-items-wrapper .e-tabs-items .e-tab-title.e-active' => 'border-color: {{VALUE}};',
+					'{{WRAPPER}} .e-tabs-items-wrapper .e-tab-title.e-active' => 'border-color: {{VALUE}};',
 				],
 				'condition' => [
 					'active_separator_style!' => '',
@@ -1381,10 +1452,13 @@ class Video_Playlist extends Base_Widget {
 					'em' => [
 						'max' => 2,
 					],
+					'rem' => [
+						'max' => 2,
+					],
 				],
 				'selectors' => [
-					'{{WRAPPER}} .e-tabs-inner-tabs .e-inner-tabs-wrapper' => '--inner-tabs-border-height: {{SIZE}}{{UNIT}};',
-					'{{WRAPPER}} .e-tabs-inner-tabs .e-inner-tabs-wrapper .e-inner-tab-title.e-inner-tab-active' => 'border-width: 0 0 {{SIZE}}{{UNIT}} 0;',
+					'{{WRAPPER}} .e-tabs .e-tabs-inner-tabs .e-inner-tabs-wrapper' => '--inner-tabs-border-height: {{SIZE}}{{UNIT}};',
+					'{{WRAPPER}} .e-tabs .e-tabs-inner-tabs .e-inner-tabs-wrapper .e-inner-tab-title.e-inner-tab-active' => 'border-width: 0 0 {{SIZE}}{{UNIT}} 0;',
 				],
 			]
 		);
@@ -1395,7 +1469,7 @@ class Video_Playlist extends Base_Widget {
 				'label' => esc_html__( 'Border Color', 'elementor-pro' ),
 				'type' => Controls_Manager::COLOR,
 				'selectors' => [
-					'{{WRAPPER}} .e-tabs-inner-tabs .e-inner-tabs-wrapper' => '--inner-tabs-border-color: {{VALUE}};',
+					'{{WRAPPER}} .e-tabs .e-tabs-inner-tabs .e-inner-tabs-wrapper' => '--inner-tabs-border-color: {{VALUE}};',
 				],
 			]
 		);
@@ -1406,9 +1480,9 @@ class Video_Playlist extends Base_Widget {
 				'label' => esc_html__( 'Background Color', 'elementor-pro' ),
 				'type' => Controls_Manager::COLOR,
 				'selectors' => [
-					'{{WRAPPER}} .e-tabs-inner-tabs .e-inner-tabs-wrapper .e-inner-tab-active' => 'background-color: {{VALUE}};',
-					'{{WRAPPER}} .e-tabs-inner-tabs .e-inner-tabs-content-wrapper .e-inner-tab-content' => 'background-color: {{VALUE}};',
-					'{{WRAPPER}} .e-tabs-inner-tabs .e-inner-tabs-content-wrapper .e-inner-tab-title' => 'background-color: {{VALUE}};',
+					'{{WRAPPER}} .e-tabs .e-tabs-inner-tabs .e-inner-tabs-wrapper .e-inner-tab-active' => 'background-color: {{VALUE}};',
+					'{{WRAPPER}} .e-tabs .e-tabs-inner-tabs .e-inner-tabs-content-wrapper .e-inner-tab-content' => 'background-color: {{VALUE}};',
+					'{{WRAPPER}} .e-tabs .e-tabs-inner-tabs .e-inner-tabs-content-wrapper .e-inner-tab-title' => 'background-color: {{VALUE}};',
 				],
 			]
 		);
@@ -1428,7 +1502,7 @@ class Video_Playlist extends Base_Widget {
 				'label' => esc_html__( 'Color', 'elementor-pro' ),
 				'type' => Controls_Manager::COLOR,
 				'selectors' => [
-					'{{WRAPPER}} .e-tabs-inner-tabs .e-inner-tabs-wrapper .e-inner-tab-title a' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .e-tabs .e-tabs-inner-tabs .e-inner-tabs-wrapper .e-inner-tab-title a' => 'color: {{VALUE}};',
 				],
 			]
 		);
@@ -1439,8 +1513,8 @@ class Video_Playlist extends Base_Widget {
 				'label' => esc_html__( 'Active Color', 'elementor-pro' ),
 				'type' => Controls_Manager::COLOR,
 				'selectors' => [
-					'{{WRAPPER}} .e-tabs-inner-tabs .e-inner-tabs-wrapper .e-inner-tab-title.e-inner-tab-active a' => 'color: {{VALUE}};',
-					'{{WRAPPER}} .e-tabs-inner-tabs .e-inner-tabs-wrapper .e-inner-tab-title.e-inner-tab-active' => 'border-color: {{VALUE}};',
+					'{{WRAPPER}} .e-tabs .e-tabs-inner-tabs .e-inner-tabs-wrapper .e-inner-tab-title.e-inner-tab-active a' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .e-tabs .e-tabs-inner-tabs .e-inner-tabs-wrapper .e-inner-tab-title.e-inner-tab-active' => 'border-color: {{VALUE}};',
 				],
 			]
 		);
@@ -1550,6 +1624,21 @@ class Video_Playlist extends Base_Widget {
 				],
 				'global' => [
 					'default' => Global_Colors::COLOR_TEXT,
+				],
+			]
+		);
+
+		$this->add_control(
+			'inner_tab_hover_show_more_color_transition_duration',
+			[
+				'label' => esc_html__( 'Transition Duration', 'elementor-pro' ),
+				'type' => Controls_Manager::SLIDER,
+				'size_units' => [ 's', 'ms', 'custom' ],
+				'default' => [
+					'unit' => 'ms',
+				],
+				'selectors' => [
+					'{{WRAPPER}} .e-tabs-inner-tabs .e-inner-tabs-content-wrapper .e-inner-tab-content button' => 'transition-duration: {{SIZE}}{{UNIT}};',
 				],
 			]
 		);
@@ -2004,7 +2093,7 @@ class Video_Playlist extends Base_Widget {
 					case 'hosted':
 						playlistItemObject.type = playlistItem.type;
 						playlistItemObject.videoTitle = playlistItem.title;
-						playlistItemObject.videoHtmlTag = playlistItem.video_html_tag;
+						playlistItemObject.videoHtmlTag = elementor.helpers.validateHTMLTag( playlistItem.video_html_tag );
 
 						if ( playlistItem.youtube_url && 'youtube' === playlistItem.type ) {
 							playlistItemObject.videoUrl = playlistItem.youtube_url;
@@ -2049,12 +2138,12 @@ class Video_Playlist extends Base_Widget {
 					case 'section':
 						playlistItemObject.type = playlistItem.type;
 						playlistItemObject.sectionTitle = playlistItem.title;
-						playlistItemObject.sectionHtmlTag = playlistItem.section_html_tag;
+						playlistItemObject.sectionHtmlTag = elementor.helpers.validateHTMLTag( playlistItem.section_html_tag );
 						playlistItemObject.isInnerTabsVisible = false;
 					break;
 				}
 
-				playlistItemObject.htmlAttributesVideo = createPlaylistItemVideoAttributes( index, id, playlistItem, playlistItemObject.videoUrl );
+				playlistItemObject.htmlAttributesVideo = createPlaylistItemVideoAttributes( index, id, playlistItem, elementor.helpers.sanitizeUrl( playlistItemObject.videoUrl ) );
 
 				playlistItemsArray.push(playlistItemObject);
 			} );

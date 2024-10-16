@@ -8,6 +8,8 @@ use Elementor\Controls_Manager;
 use ElementorPro\Core\Utils;
 use ElementorPro\Modules\Posts\Traits\Button_Widget_Trait;
 use ElementorPro\Modules\Posts\Traits\Pagination_Trait;
+use ElementorPro\Modules\LoopBuilder\Module as LoopBuilderModule;
+use ElementorPro\Modules\Woocommerce\Module as WoocommerceModule;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly
@@ -60,6 +62,8 @@ abstract class Posts_Base extends Base_Widget {
 			'section_condition' => [
 				'pagination_type' => 'load_more_on_click',
 			],
+			'prefix_class' => 'load-more-align-',
+			'alignment_default' => 'center',
 		] );
 	}
 
@@ -142,6 +146,12 @@ abstract class Posts_Base extends Base_Widget {
 					'px' => [
 						'max' => 50,
 					],
+					'em' => [
+						'max' => 5,
+					],
+					'rem' => [
+						'max' => 5,
+					],
 				],
 				'selectors' => [
 					'{{WRAPPER}}' => '--load-more—spacing: {{SIZE}}{{UNIT}};',
@@ -156,6 +166,12 @@ abstract class Posts_Base extends Base_Widget {
 			'section_pagination',
 			[
 				'label' => esc_html__( 'Pagination', 'elementor-pro' ),
+				'condition' => [
+					'_skin!' => [
+						LoopBuilderModule::LOOP_POST_TAXONOMY_SKIN_ID,
+						WoocommerceModule::LOOP_PRODUCT_TAXONOMY_SKIN_ID,
+					],
+				],
 			]
 		);
 
@@ -363,8 +379,6 @@ abstract class Posts_Base extends Base_Widget {
 		$this->register_button_content_controls( [
 			'button_text' => esc_html__( 'Load More', 'elementor-pro' ),
 			'control_label_name' => esc_html__( 'Button Text', 'elementor-pro' ),
-			'prefix_class' => 'load-more-align-',
-			'alignment_default' => 'center',
 			'section_condition' => [
 				'pagination_type' => 'load_more_on_click',
 			],
@@ -577,8 +591,13 @@ abstract class Posts_Base extends Base_Widget {
 				],
 				'range' => [
 					'px' => [
-						'min' => 0,
 						'max' => 100,
+					],
+					'em' => [
+						'max' => 10,
+					],
+					'rem' => [
+						'max' => 10,
 					],
 				],
 				'selectors' => [
@@ -598,8 +617,13 @@ abstract class Posts_Base extends Base_Widget {
 				'size_units' => [ 'px', 'em', 'rem', 'custom' ],
 				'range' => [
 					'px' => [
-						'min' => 0,
 						'max' => 100,
+					],
+					'em' => [
+						'max' => 10,
+					],
+					'rem' => [
+						'max' => 10,
 					],
 				],
 				'selectors' => [
@@ -679,7 +703,7 @@ abstract class Posts_Base extends Base_Widget {
 
 		if ( $i > 1 ) {
 			if ( '' === get_option( 'permalink_structure' ) || in_array( $post->post_status, [ 'draft', 'pending' ] ) ) {
-				$url = add_query_arg( 'page', $i, $url );
+				$url = add_query_arg( $this->get_wp_pagination_query_var(), $i, $url );
 			} elseif ( get_option( 'show_on_front' ) === 'page' && (int) get_option( 'page_on_front' ) === $post->ID ) {
 				$url = trailingslashit( $url ) . user_trailingslashit( "$wp_rewrite->pagination_base/" . $i, 'single_paged' );
 			} else {
@@ -707,7 +731,7 @@ abstract class Posts_Base extends Base_Widget {
 			$url = $this->get_wp_link_page_url_for_normal_page_load( $url );
 		}
 
-		return $url;
+		return esc_url( $url );
 	}
 
 	public function is_allow_to_use_custom_page_option() {
@@ -866,5 +890,16 @@ abstract class Posts_Base extends Base_Widget {
 		$base_raw_url = $this->is_rest_request() ? $this->get_base_url_for_rest_request( $post_id, $url ) : $this->get_base_url();
 
 		return $this->format_query_string_concatenation( $base_raw_url . '&e-page-' . $this->get_id() . '=' . $i );
+	}
+
+	/**
+	 * @return string
+	 */
+	private function get_wp_pagination_query_var() {
+		if ( '' === get_option( 'permalink_structure' ) && $this->is_posts_page( $this->is_allow_to_use_custom_page_option() ) ) {
+			return 'paged';
+		}
+
+		return 'page';
 	}
 }

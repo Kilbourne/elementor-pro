@@ -39,6 +39,24 @@ class Call_To_Action extends Base_Widget {
 		return [ 'call to action', 'cta', 'button' ];
 	}
 
+	protected function is_dynamic_content(): bool {
+		return false;
+	}
+
+	/**
+	 * Get style dependencies.
+	 *
+	 * Retrieve the list of style dependencies the widget requires.
+	 *
+	 * @since 3.24.0
+	 * @access public
+	 *
+	 * @return array Widget style dependencies.
+	 */
+	public function get_style_depends(): array {
+		return [ 'widget-call-to-action' ];
+	}
+
 	protected function register_controls() {
 		$this->start_controls_section(
 			'section_main_image',
@@ -80,6 +98,10 @@ class Call_To_Action extends Base_Widget {
 						'title' => esc_html__( 'Right', 'elementor-pro' ),
 						'icon' => 'eicon-h-align-right',
 					],
+					'below' => [
+						'title' => esc_html__( 'Below', 'elementor-pro' ),
+						'icon' => 'eicon-v-align-bottom',
+					],
 				],
 				'prefix_class' => 'elementor-cta-%s-layout-image-',
 				'condition' => [
@@ -111,7 +133,6 @@ class Call_To_Action extends Base_Widget {
 				'condition' => [
 					'bg_image[id]!' => '',
 				],
-				'separator' => 'none',
 			]
 		);
 
@@ -188,40 +209,6 @@ class Call_To_Action extends Base_Widget {
 					'library' => 'fa-solid',
 				],
 				'condition' => [
-					'graphic_element' => 'icon',
-				],
-			]
-		);
-
-		$this->add_control(
-			'icon_view',
-			[
-				'label' => esc_html__( 'View', 'elementor-pro' ),
-				'type' => Controls_Manager::SELECT,
-				'options' => [
-					'default' => esc_html__( 'Default', 'elementor-pro' ),
-					'stacked' => esc_html__( 'Stacked', 'elementor-pro' ),
-					'framed' => esc_html__( 'Framed', 'elementor-pro' ),
-				],
-				'default' => 'default',
-				'condition' => [
-					'graphic_element' => 'icon',
-				],
-			]
-		);
-
-		$this->add_control(
-			'icon_shape',
-			[
-				'label' => esc_html__( 'Shape', 'elementor-pro' ),
-				'type' => Controls_Manager::SELECT,
-				'options' => [
-					'circle' => esc_html__( 'Circle', 'elementor-pro' ),
-					'square' => esc_html__( 'Square', 'elementor-pro' ),
-				],
-				'default' => 'circle',
-				'condition' => [
-					'icon_view!' => 'default',
 					'graphic_element' => 'icon',
 				],
 			]
@@ -322,8 +309,6 @@ class Call_To_Action extends Base_Widget {
 				'dynamic' => [
 					'active' => true,
 				],
-				'placeholder' => esc_html__( 'https://your-link.com', 'elementor-pro' ),
-
 			]
 		);
 
@@ -337,7 +322,6 @@ class Call_To_Action extends Base_Widget {
 					'button' => esc_html__( 'Button Only', 'elementor-pro' ),
 				],
 				'default' => 'button',
-				'separator' => 'none',
 				'condition' => [
 					'link[url]!' => '',
 				],
@@ -406,6 +390,14 @@ class Call_To_Action extends Base_Widget {
 						'min' => 100,
 						'max' => 1000,
 					],
+					'em' => [
+						'min' => 10,
+						'max' => 100,
+					],
+					'rem' => [
+						'min' => 10,
+						'max' => 100,
+					],
 					'vh' => [
 						'min' => 10,
 						'max' => 100,
@@ -463,7 +455,6 @@ class Call_To_Action extends Base_Widget {
 					],
 				],
 				'prefix_class' => 'elementor-cta--valign-',
-				'separator' => 'none',
 			]
 		);
 
@@ -500,12 +491,13 @@ class Call_To_Action extends Base_Widget {
 				'size_units' => [ 'px', '%', 'em', 'rem', 'vw', 'custom' ],
 				'range' => [
 					'px' => [
-						'min' => 0,
 						'max' => 500,
 					],
-					'%' => [
-						'min' => 0,
-						'max' => 100,
+					'em' => [
+						'max' => 50,
+					],
+					'rem' => [
+						'max' => 50,
 					],
 				],
 				'selectors' => [
@@ -526,12 +518,13 @@ class Call_To_Action extends Base_Widget {
 				'size_units' => [ 'px', 'em', 'rem', 'vh', 'custom' ],
 				'range' => [
 					'px' => [
-						'min' => 0,
 						'max' => 500,
 					],
-					'vh' => [
-						'min' => 0,
-						'max' => 100,
+					'em' => [
+						'max' => 50,
+					],
+					'rem' => [
+						'max' => 50,
 					],
 				],
 				'selectors' => [
@@ -567,8 +560,13 @@ class Call_To_Action extends Base_Widget {
 				'size_units' => [ 'px', 'em', 'rem', 'custom' ],
 				'range' => [
 					'px' => [
-						'min' => 0,
 						'max' => 100,
+					],
+					'em' => [
+						'max' => 10,
+					],
+					'rem' => [
+						'max' => 10,
 					],
 				],
 				'selectors' => [
@@ -623,8 +621,13 @@ class Call_To_Action extends Base_Widget {
 				'size_units' => [ 'px', '%', 'em', 'rem', 'custom' ],
 				'range' => [
 					'px' => [
-						'min' => 0,
 						'max' => 200,
+					],
+					'em' => [
+						'max' => 20,
+					],
+					'rem' => [
+						'max' => 20,
 					],
 				],
 				'selectors' => [
@@ -637,6 +640,40 @@ class Call_To_Action extends Base_Widget {
 		);
 
 		$this->add_control(
+			'icon_view',
+			[
+				'label' => esc_html__( 'View', 'elementor-pro' ),
+				'type' => Controls_Manager::SELECT,
+				'options' => [
+					'default' => esc_html__( 'Default', 'elementor-pro' ),
+					'stacked' => esc_html__( 'Stacked', 'elementor-pro' ),
+					'framed' => esc_html__( 'Framed', 'elementor-pro' ),
+				],
+				'default' => 'default',
+				'condition' => [
+					'graphic_element' => 'icon',
+				],
+			]
+		);
+
+		$this->add_control(
+			'icon_shape',
+			[
+				'label' => esc_html__( 'Shape', 'elementor-pro' ),
+				'type' => Controls_Manager::SELECT,
+				'options' => [
+					'circle' => esc_html__( 'Circle', 'elementor-pro' ),
+					'square' => esc_html__( 'Square', 'elementor-pro' ),
+				],
+				'default' => 'circle',
+				'condition' => [
+					'icon_view!' => 'default',
+					'graphic_element' => 'icon',
+				],
+			]
+		);
+
+		$this->add_control(
 			'icon_spacing',
 			[
 				'label' => esc_html__( 'Spacing', 'elementor-pro' ),
@@ -644,8 +681,13 @@ class Call_To_Action extends Base_Widget {
 				'size_units' => [ 'px', 'em', 'rem', 'custom' ],
 				'range' => [
 					'px' => [
-						'min' => 0,
 						'max' => 100,
+					],
+					'em' => [
+						'max' => 10,
+					],
+					'rem' => [
+						'max' => 10,
 					],
 				],
 				'selectors' => [
@@ -705,6 +747,14 @@ class Call_To_Action extends Base_Widget {
 						'min' => 6,
 						'max' => 300,
 					],
+					'em' => [
+						'min' => 0.6,
+						'max' => 30,
+					],
+					'rem' => [
+						'min' => 0.6,
+						'max' => 30,
+					],
 				],
 				'selectors' => [
 					'{{WRAPPER}} .elementor-icon' => 'font-size: {{SIZE}}{{UNIT}};',
@@ -725,7 +775,14 @@ class Call_To_Action extends Base_Widget {
 					'{{WRAPPER}} .elementor-icon' => 'padding: {{SIZE}}{{UNIT}};',
 				],
 				'range' => [
+					'px' => [
+						'max' => 50,
+					],
 					'em' => [
+						'min' => 0,
+						'max' => 5,
+					],
+					'rem' => [
 						'min' => 0,
 						'max' => 5,
 					],
@@ -748,6 +805,9 @@ class Call_To_Action extends Base_Widget {
 						'max' => 20,
 					],
 					'em' => [
+						'max' => 2,
+					],
+					'rem' => [
 						'max' => 2,
 					],
 				],
@@ -1051,13 +1111,16 @@ class Call_To_Action extends Base_Widget {
 			[
 				'label' => esc_html__( 'Size', 'elementor-pro' ),
 				'type' => Controls_Manager::SELECT,
-				'default' => 'sm',
 				'options' => [
 					'xs' => esc_html__( 'Extra Small', 'elementor-pro' ),
 					'sm' => esc_html__( 'Small', 'elementor-pro' ),
 					'md' => esc_html__( 'Medium', 'elementor-pro' ),
 					'lg' => esc_html__( 'Large', 'elementor-pro' ),
 					'xl' => esc_html__( 'Extra Large', 'elementor-pro' ),
+				],
+				'default' => 'sm',
+				'condition' => [
+					'button_size!' => 'sm', // a workaround to hide the control, unless it's in use (not default).
 				],
 			]
 		);
@@ -1181,6 +1244,9 @@ class Call_To_Action extends Base_Widget {
 					'em' => [
 						'max' => 2,
 					],
+					'rem' => [
+						'max' => 2,
+					],
 				],
 				'selectors' => [
 					'{{WRAPPER}} .elementor-cta__button' => 'border-width: {{SIZE}}{{UNIT}};',
@@ -1197,8 +1263,13 @@ class Call_To_Action extends Base_Widget {
 				'size_units' => [ 'px', '%', 'em', 'rem', 'custom' ],
 				'range' => [
 					'px' => [
-						'min' => 0,
 						'max' => 100,
+					],
+					'em' => [
+						'max' => 10,
+					],
+					'rem' => [
+						'max' => 10,
 					],
 				],
 				'selectors' => [
@@ -1277,8 +1348,13 @@ class Call_To_Action extends Base_Widget {
 				'size_units' => [ 'px', 'em', 'rem', 'custom' ],
 				'range' => [
 					'px' => [
-						'min' => 0,
 						'max' => 50,
+					],
+					'em' => [
+						'max' => 5,
+					],
+					'em' => [
+						'max' => 5,
 					],
 				],
 				'selectors' => [
@@ -1413,6 +1489,7 @@ class Call_To_Action extends Base_Widget {
 					'px' => [
 						'min' => 0,
 						'max' => 3000,
+						'step' => 100,
 					],
 				],
 				'selectors' => [
@@ -1525,7 +1602,6 @@ class Call_To_Action extends Base_Widget {
 				'selectors' => [
 					'{{WRAPPER}} .elementor-cta__bg-overlay' => 'mix-blend-mode: {{VALUE}}',
 				],
-				'separator' => 'none',
 			]
 		);
 
@@ -1559,7 +1635,7 @@ class Call_To_Action extends Base_Widget {
 		$this->add_control(
 			'effect_duration',
 			[
-				'label' => esc_html__( 'Transition Duration', 'elementor-pro' ),
+				'label' => esc_html__( 'Transition Duration', 'elementor-pro' ) . ' (ms)',
 				'type' => Controls_Manager::SLIDER,
 				'render_type' => 'template',
 				'default' => [
@@ -1569,6 +1645,7 @@ class Call_To_Action extends Base_Widget {
 					'px' => [
 						'min' => 0,
 						'max' => 3000,
+						'step' => 100,
 					],
 				],
 				'selectors' => [
@@ -1614,20 +1691,14 @@ class Call_To_Action extends Base_Widget {
 
 		$this->add_render_attribute( 'wrapper', 'class', 'elementor-cta' );
 
-		$background_selector = "background-image: url($bg_image);";
-
-		$is_lazyload_active = Plugin::elementor()->experiments->is_feature_active( 'e_lazyload' );
-		$is_edit_mode = Plugin::elementor()->editor->is_edit_mode();
-
-		if ( $print_bg && ! $is_edit_mode && $is_lazyload_active ) {
-			$background_selector = "background-image: var(--e-bg-lazyload-loaded); --e-bg-lazyload: url($bg_image);";
-			$this->add_render_attribute( 'wrapper', 'data-e-bg-lazyload', '.elementor-bg' );
-		}
+		/*$this->add_render_attribute( 'background_image', 'style', [
+			'background-image: url(' . $bg_image . ');',
+		] );*/
 
 		$this->add_render_attribute(
 			'background_image',
 			[
-				'style' => $background_selector,
+				'style' => 'background-image: url(' . esc_url( $bg_image ) . ');',
 				'role' => 'img',
 				'aria-label' => Control_Media::get_image_alt( $settings['bg_image'] ),
 			]
